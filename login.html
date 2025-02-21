@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in Page</title>
+  <style>
+    :root {
+      --primary-color: #007BFF;
+      --error-color: #ff3860;
+      --success-color: #09c372;
+      --background-gradient: linear-gradient(135deg, #f4f4f9, #e0e0f5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--background-gradient);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 60px 0 120px; /* Increased top padding */
+    }
+
+    .container {
+      background: white;
+      padding: 35px 45px;  /* Slightly reduced padding */
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      width: 90%;  /* Reduced from 100% */
+      max-width: 540px;  /* Reduced from 600px */
+      margin: 0 auto;
+      transform: scale(0.9);  /* Add scaling effect */
+      transform-origin: center;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 34px;  /* Slightly reduced from 38px */
+      margin-bottom: 30px;  /* Slightly reduced margin */
+      color: #333;
+    }
+
+    .input-group {
+      margin-bottom: 25px;  /* Increased from 20px */
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      display: block;
+      font-size: 18px;  /* Increased from 16px */
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;  /* Increased from 12px */
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 17px;  /* Increased from 16px */
+    }
+
+    input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    input.error {
+      border-color: var(--error-color);
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;  /* Increased from 12px */
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 25px; /* Increased from 4px to make more circular */
+      font-size: 20px;  /* Increased from 18px */
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .error-message {
+      color: var(--error-color);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .account-text {
+      text-align: center;
+      margin-top: 20px;  /* Increased from 15px */
+      font-size: 16px;  /* Increased from 14px */
+    }
+
+    .account-text a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .account-text a:hover {
+      text-decoration: underline;
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .forgot-password a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+
+    .password-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-container input {
+      padding-right: 40px; /* Make room for the icon */
+      -webkit-appearance: none; /* Prevent browser styling */
+      -moz-appearance: none;
+      appearance: none;
+      background: none; /* Remove default background */
+    }
+
+    /* Disable browser password reveal button */
+    input::-ms-reveal,
+    input::-ms-clear {
+      display: none;
+    }
+
+    .password-container .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--primary-color);
+      z-index: 3; /* Increase z-index */
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      pointer-events: auto; /* Ensure clickable */
+    }
+
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .social-login {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .social-login button {
+      background-color: transparent;
+      border: 1px solid #ccc;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 12px 20px;  /* Increased padding */
+      font-size: 17px;  /* Increased from 16px */
+      border-radius: 25px; /* Added circular edges */
+      transition: all 0.3s ease;
+    }
+
+    .social-login button:hover {
+      background-color: #f4f4f9;
+    }
+
+    .social-login img {
+      width: 24px;  /* Increased from 20px */
+      height: 24px;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 5px; /* Add gap between checkbox and label */
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin: 0; /* Remove default margins */
+    }
+
+    .remember-me label {
+      margin: 0; /* Remove default margins */
+      padding: 0; /* Remove default padding */
+      font-size: 14px; /* Adjust size if needed */
+      display: inline; /* Change from block to inline */
+    }
+
+    .social-icons {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%); /* Center horizontally */
+      width: auto; /* Change from 100% to auto */
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 15px;
+      z-index: 1000;
+      background: transparent;
+      min-width: 280px; /* Minimum width to prevent squishing */
+      max-width: 100%; /* Maximum width for responsiveness */
+    }
+
+    .social-icons a {
+      position: relative; /* Add position relative */
+      flex-shrink: 0; /* Prevent icons from shrinking */
+      color: #333;
+      font-size: 24px; /* Reduced size */
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;  /* Reduced size */
+      height: 50px; /* Reduced size */
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Specific colors for each social icon */
+    .social-icons a.instagram:hover {
+      background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+      color: white;
+    }
+
+    .social-icons a.facebook:hover {
+      background: #1877f2;
+      color: white;
+    }
+
+    .social-icons a.github:hover {
+      background: #333;
+      color: white;
+    }
+
+    .social-icons a.tiktok:hover {
+      background: #000;
+      color: white;
+      text-shadow: 2px 2px #25F4EE, -2px -2px #FE2C55;
+    }
+
+    .social-icons img {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+  <!-- Add Font Awesome for social icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Sign in</h2>
+    <form id="loginForm">
+      <!-- Email -->
+      <div class="input-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <small id="emailError" class="error-message"></small>
+      </div>
+
+      <!-- Password -->
+      <div class="input-group">
+        <label for="password">Password:</label>
+        <div class="password-container">
+          <input type="password" id="password" name="password" minlength="6" required autocomplete="new-password">
+          <i class="toggle-password fas fa-eye" onclick="togglePasswordVisibility()"></i>
+        </div>
+        <small id="passwordError" class="error-message"></small>
+      </div>
+
+      <!-- Remember Me -->
+      <div class="remember-me">
+        <input type="checkbox" id="rememberMe" name="rememberMe">
+        <label for="rememberMe">Remember Me</label>
+      </div>
+
+      <!-- Forgot Password -->
+      <div class="forgot-password">
+        <a href="#">Forgot Password?</a>
+      </div>
+
+      <!-- Sign in Button -->
+      <button type="submit" id="loginButton">
+        <span id="buttonText">Sign in</span>
+        <div id="loader" class="loader" style="display: none;"></div>
+      </button>
+
+      <!-- Social Login -->
+      <div class="social-login">
+        <button type="button" onclick="loginWithGoogle()">
+          <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google">
+          Sign in with Google
+        </button>
+        <button type="button" onclick="loginWithFacebook()">
+          <img src="https://img.icons8.com/color/16/000000/facebook-new.png" alt="Facebook">
+          Sign in with Facebook
+        </button>
+      </div>
+
+      <!-- Don't have an account -->
+      <p class="account-text">Don't have an account? <a href="registration.html">Register</a></p>
+    </form>
+  </div>
+
+  <!-- Add social icons -->
+  <div class="social-icons">
+    <a href="#" title="Instagram" class="instagram"><i class="fab fa-instagram"></i></a>
+    <a href="#" title="Facebook" class="facebook"><i class="fab fa-facebook-f"></i></a>
+    <a href="#" title="GitHub" class="github"><i class="fab fa-github"></i></a>
+    <a href="#" title="TikTok" class="tiktok"><i class="fab fa-tiktok"></i></a>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loader = document.getElementById('loader');
+    const buttonText = document.getElementById('buttonText');
+
+    // Toggle password visibility
+    function togglePasswordVisibility() {
+      const input = document.getElementById('password');
+      const icon = document.querySelector('.toggle-password');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    // Validate email in real-time
+    emailInput.addEventListener('input', () => {
+      const email = emailInput.value.trim();
+      if (!email) {
+        document.getElementById('emailError').textContent = 'Email is required.';
+        emailInput.classList.add('error');
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('emailError').textContent = 'Invalid email format.';
+        emailInput.classList.add('error');
+      } else {
+        document.getElementById('emailError').textContent = '';
+        emailInput.classList.remove('error');
+      }
+    });
+
+    // Validate password in real-time
+    passwordInput.addEventListener('input', () => {
+      const password = passwordInput.value;
+      if (!password || password.length < 6) {
+        document.getElementById('passwordError').textContent = 'Password must be at least 6 characters long.';
+        passwordInput.classList.add('error');
+      } else {
+        document.getElementById('passwordError').textContent = '';
+        passwordInput.classList.remove('error');
+      }
+    });
+
+    // Simulate sign in with Google
+    function loginWithGoogle() {
+      alert('Signing in with Google...');
+    }
+
+    // Simulate sign in with Facebook
+    function loginWithFacebook() {
+      alert('Signing in with Facebook...');
+    }
+
+    // Handle form submission
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      // Show loader
+      buttonText.style.display = 'none';
+      loader.style.display = 'block';
+
+      // Simulate sign in success
+      setTimeout(() => {
+        alert('Sign in successful!');
+        form.reset();
+        buttonText.style.display = 'inline';
+        loader.style.display = 'none';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

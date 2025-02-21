@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Page</title>
+  <style>
+    :root {
+      --primary-color: #007BFF;
+      --error-color: #ff3860;
+      --success-color: #09c372;
+      --background-gradient: linear-gradient(135deg, #f4f4f9, #e0e0f5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--background-gradient);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 35px 45px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+      position: relative;
+      border: 1px solid rgba(0, 123, 255, 0.2);
+      transform: scale(0.95);  /* Slightly reduce size */
+      overflow: visible;
+      max-height: none;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #007BFF;
+      background: white;
+      padding: 15px 0;
+      font-size: 28px;
+      text-transform: uppercase;
+      font-weight: bold;
+      border-bottom: 2px solid #007BFF;
+      text-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+      letter-spacing: 1px;
+      animation: twinkle 2s infinite;
+      position: relative;  /* Changed from sticky */
+    }
+
+    @keyframes twinkle {
+      0% { text-shadow: 0 0 10px rgba(0, 123, 255, 0.5); }
+      50% { text-shadow: 0 0 20px rgba(0, 123, 255, 0.8), 0 0 30px rgba(0, 123, 255, 0.6); }
+      100% { text-shadow: 0 0 10px rgba(0, 123, 255, 0.5); }
+    }
+
+    .input-group {
+      margin-bottom: 15px;  /* Reduced margin */
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;  /* Changed from white to dark gray */
+      font-size: 15px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      background-color: white;  /* Changed from dark to white */
+      color: #333;  /* Changed from white to dark gray */
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      background-color: white;  /* Keep white background on focus */
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+    }
+
+    input.error, select.error {
+      border-color: var(--error-color);
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.1);
+      transform-origin: 0 0;
+      animation: rotate 3s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    #registerButton {
+      background: linear-gradient(90deg, #007bff, #0056b3);
+      background-size: 200% 100%;
+      animation: gradientMove 2s ease infinite;
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .error-message {
+      color: var(--error-color);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .account-text {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #333;  /* Changed from white to dark gray */
+    }
+
+    .account-text a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .account-text a:hover {
+      text-decoration: underline;
+    }
+
+    .phone-input {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .phone-input select {
+      width: auto;
+      padding: 8px;
+      font-size: 14px;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .password-container .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--primary-color);
+    }
+
+    .password-strength {
+      margin-top: 5px;
+      font-size: 12px;
+    }
+
+    .password-strength.weak {
+      color: var(--error-color);
+    }
+
+    .password-strength.medium {
+      color: orange;
+    }
+
+    .password-strength.strong {
+      color: var(--success-color);
+    }
+
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .location-group {
+      display: flex;
+      gap: 10px;  /* Reduced gap */
+      margin-bottom: 15px;
+    }
+
+    .location-group .input-group {
+      flex: 1;
+      margin-bottom: 0;
+      min-width: 100px;
+    }
+
+    .location-group input {
+      width: 100%;
+    }
+
+    form {
+      padding: 0;  /* Removed padding */
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Update scrollbar for dark theme */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #007BFF;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0056b3;
+    }
+
+    .terms-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;  /* Reduced margin */
+    }
+
+    .terms-container input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+
+    .terms-container label {
+      margin: 0;
+      display: inline;
+      color: #333;  /* Changed from white to dark gray */
+    }
+
+    /* Make calendar icon white */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: none;  /* Remove invert filter */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>REGISTER TO JOIN PRO'S NOW !!</h2>
+    <form id="registrationForm">
+      <!-- Name -->
+      <div class="input-group">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+      </div>
+      
+      <div class="input-group">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+      </div>
+
+      <!-- Date of Birth -->
+      <div class="input-group">
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required>
+        <small id="ageError" class="error-message"></small>
+      </div>
+
+      <!-- Phone Number -->
+      <div class="input-group">
+        <label for="phone">Phone Number:</label>
+        <div class="phone-input">
+          <select id="countryCode" name="countryCode" required>
+            <option value="+1" selected>USA (+1)</option>
+            <option value="+91">India (+91)</option>
+            <option value="+44">UK (+44)</option>
+            <option value="+254">Kenya (+254)</option>
+            <option value="+234">Nigeria (+234)</option>
+            <option value="+61">Australia (+61)</option>
+          </select>
+          <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="10 digits" required>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="input-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <!-- Combined location fields -->
+      <div class="location-group">
+        <div class="input-group">
+          <label for="country">Country:</label>
+          <select id="country" name="country" required onchange="updateCounties()">
+            <option value="" disabled selected>Select Country</option>
+            <option value="usa">USA</option>
+            <option value="uk">UK</option>
+            <option value="kenya">Kenya</option>
+            <option value="canada">Canada</option>
+            <option value="australia">Australia</option>
+            <option value="germany">Germany</option>
+            <option value="france">France</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="county">County:</label>
+          <select id="county" name="county" required onchange="updateConstituencies()">
+            <option value="" disabled selected>Select County</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="constituency">Constituency:</label>
+          <select id="constituency" name="constituency" required>
+            <option value="" disabled selected>Select Constituency</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="input-group">
+        <label for="password">Password:</label>
+        <div class="password-container">
+          <input type="password" id="password" name="password" minlength="6" required>
+          <span class="toggle-password" onclick="togglePasswordVisibility('password')">👁️</span>
+        </div>
+        <div id="passwordStrength" class="password-strength"></div>
+      </div>
+
+      <div class="input-group">
+        <label for="confirmPassword">Confirm Password:</label>
+        <div class="password-container">
+          <input type="password" id="confirmPassword" name="confirmPassword" minlength="6" required>
+          <span class="toggle-password" onclick="togglePasswordVisibility('confirmPassword')">👁️</span>
+        </div>
+        <small id="passwordError" class="error-message"></small>
+      </div>
+
+      <!-- Occupation -->
+      <div class="input-group">
+        <label for="occupation">Occupation:</label>
+        <select id="occupation" name="occupation" required>
+          <option value="" disabled selected>Select your occupation</option>
+          <option value="student">Student</option>
+          <option value="working">Working</option>
+          <option value="athlete">Full-Time Athlete</option>
+        </select>
+      </div>
+
+      <!-- Terms and Conditions -->
+      <div class="terms-container">
+        <input type="checkbox" id="terms" name="terms" required>
+        <label for="terms">
+          I agree to the <a href="#">terms and conditions</a>
+        </label>
+      </div>
+
+      <!-- Register Button -->
+      <button type="submit" id="registerButton">
+        <span id="buttonText">Register</span>
+        <div id="loader" class="loader" style="display: none;"></div>
+      </button>
+
+      <!-- Already have an account -->
+      <p class="account-text">Already have an account? <a href="login.html">Sign in</a></p>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('registrationForm');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const passwordStrength = document.getElementById('passwordStrength');
+    const loader = document.getElementById('loader');
+    const buttonText = document.getElementById('buttonText');
+
+    // Toggle password visibility
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    // Check password strength
+    passwordInput.addEventListener('input', () => {
+      const password = passwordInput.value;
+      let strength = 'weak';
+      if (password.length >= 8 && /[A-Z]/.test(password) && /[0-9]/.test(password)) {
+        strength = 'strong';
+      } else if (password.length >= 6) {
+        strength = 'medium';
+      }
+      passwordStrength.textContent = `Password Strength: ${strength}`;
+      passwordStrength.className = `password-strength ${strength}`;
+    });
+
+    // Validate form on submit
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      // Clear previous errors
+      document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+      document.querySelectorAll('input, select').forEach(el => el.classList.remove('error'));
+
+      // Get form values
+      const dob = new Date(document.getElementById('dob').value);
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+
+      // Calculate age
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+
+      // Validate age
+      if (age < 7) {
+        document.getElementById('ageError').textContent = 'You must be at least 7 years old.';
+        document.getElementById('dob').classList.add('error');
+        return;
+      }
+
+      // Validate passwords
+      if (password !== confirmPassword) {
+        document.getElementById('passwordError').textContent = 'Passwords do not match.';
+        confirmPasswordInput.classList.add('error');
+        return;
+      }
+
+      // Show loader
+      buttonText.style.display = 'none';
+      loader.style.display = 'block';
+
+      // Simulate form submission
+      setTimeout(() => {
+        alert('Registration successful!');
+        form.reset();
+        buttonText.style.display = 'inline';
+        loader.style.display = 'none';
+      }, 2000);
+    });
+
+    const countryData = {
+      kenya: {
+        counties: [
+          "Nairobi",
+          "Mombasa",
+          "Kisumu",
+          "Nakuru",
+          "Kiambu",
+          "Machakos",
+          "Uasin Gishu"
+        ],
+        constituencies: {
+          "Nairobi": [
+            "Westlands",
+            "Dagoretti North",
+            "Langata",
+            "Kibra",
+            "Roysambu",
+            "Kasarani",
+            "Embakasi East"
+          ],
+          "Mombasa": [
+            "Mvita",
+            "Nyali",
+            "Kisauni",
+            "Jomvu",
+            "Changamwe",
+            "Likoni",
+            "Port Reitz"
+          ],
+          "Kisumu": [
+            "Kisumu Central",
+            "Kisumu East",
+            "Kisumu West",
+            "Nyando",
+            "Muhoroni",
+            "Nyakach",
+            "Seme"
+          ],
+          "Nakuru": [
+            "Nakuru Town West",
+            "Nakuru Town East",
+            "Naivasha",
+            "Gilgil",
+            "Kuresoi South",
+            "Molo",
+            "Rongai"
+          ],
+          "Kiambu": [
+            "Thika Town",
+            "Ruiru",
+            "Juja",
+            "Kiambu Town",
+            "Kikuyu",
+            "Limuru",
+            "Kabete"
+          ],
+          "Machakos": [
+            "Machakos Town",
+            "Mavoko",
+            "Kathiani",
+            "Matungulu",
+            "Kangundo",
+            "Mwala",
+            "Yatta"
+          ],
+          "Uasin Gishu": [
+            "Ainabkoi",
+            "Kapseret",
+            "Kesses",
+            "Moiben",
+            "Soy",
+            "Turbo",
+            "Eldoret East"
+          ]
+        }
+      },
+      uk: {
+        counties: [
+          "Greater London",
+          "West Midlands",
+          "Greater Manchester",
+          "West Yorkshire",
+          "Kent",
+          "Essex",
+          "Hampshire"
+        ],
+        constituencies: {
+          "Greater London": [
+            "Westminster",
+            "Kensington",
+            "Chelsea",
+            "Hackney",
+            "Camden",
+            "Islington",
+            "Tower Hamlets"
+          ],
+          "West Midlands": [
+            "Birmingham Edgbaston",
+            "Birmingham Erdington",
+            "Birmingham Hall Green",
+            "Coventry North East",
+            "Wolverhampton South East",
+            "Solihull",
+            "Dudley North"
+          ],
+          "Greater Manchester": [
+            "Manchester Central",
+            "Manchester Gorton",
+            "Salford",
+            "Bolton North East",
+            "Oldham East",
+            "Rochdale",
+            "Wigan"
+          ],
+          "West Yorkshire": [
+            "Leeds Central",
+            "Leeds North East",
+            "Bradford West",
+            "Wakefield",
+            "Huddersfield",
+            "Halifax",
+            "Dewsbury"
+          ],
+          "Kent": [
+            "Canterbury",
+            "Maidstone",
+            "Dover",
+            "Sevenoaks",
+            "Tunbridge Wells",
+            "Dartford",
+            "Gravesham"
+          ],
+          "Essex": [
+            "Chelmsford",
+            "Colchester",
+            "Basildon",
+            "Southend",
+            "Harlow",
+            "Brentwood",
+            "Braintree"
+          ],
+          "Hampshire": [
+            "Southampton",
+            "Portsmouth",
+            "Winchester",
+            "Basingstoke",
+            "Eastleigh",
+            "Fareham",
+            "New Forest"
+          ]
+        }
+      },
+      usa: {
+        counties: [
+          "Los Angeles County, CA",
+          "Cook County, IL",
+          "Harris County, TX",
+          "Maricopa County, AZ",
+          "San Diego County, CA",
+          "Orange County, CA",
+          "Miami-Dade County, FL"
+        ],
+        constituencies: {
+          "Los Angeles County, CA": [
+            "CA-27 San Fernando Valley",
+            "CA-28 Burbank/Glendale",
+            "CA-29 North LA",
+            "CA-30 West San Fernando Valley",
+            "CA-32 East LA County",
+            "CA-34 Downtown LA",
+            "CA-37 South LA"
+          ],
+          "Cook County, IL": [
+            "IL-1 South Side Chicago",
+            "IL-2 South Suburbs",
+            "IL-3 Southwest Chicago",
+            "IL-4 Central Chicago",
+            "IL-5 North Chicago",
+            "IL-7 Downtown Chicago",
+            "IL-9 North Suburbs"
+          ],
+          "Harris County, TX": [
+            "TX-2 North Houston",
+            "TX-7 West Houston",
+            "TX-8 North Harris",
+            "TX-9 South Houston",
+            "TX-18 Central Houston",
+            "TX-22 Southeast Houston",
+            "TX-29 East Houston"
+          ],
+          "Maricopa County, AZ": [
+            "AZ-3 Phoenix West",
+            "AZ-4 Phoenix North",
+            "AZ-5 Mesa/Gilbert",
+            "AZ-6 Scottsdale",
+            "AZ-7 Phoenix Central",
+            "AZ-8 Phoenix Northwest",
+            "AZ-9 Tempe/Phoenix"
+          ],
+          "San Diego County, CA": [
+            "CA-49 North County",
+            "CA-50 East County",
+            "CA-51 South County",
+            "CA-52 Central",
+            "CA-53 Central San Diego",
+            "San Diego Coastal",
+            "San Diego Inland"
+          ],
+          "Orange County, CA": [
+            "CA-38 North Orange",
+            "CA-40 East Orange",
+            "CA-45 Irvine",
+            "CA-46 Santa Ana",
+            "CA-47 Costa Mesa",
+            "CA-48 Huntington Beach",
+            "CA-49 South Orange"
+          ],
+          "Miami-Dade County, FL": [
+            "FL-23 North Miami",
+            "FL-24 Miami Gardens",
+            "FL-25 Hialeah",
+            "FL-26 Southwest Miami",
+            "FL-27 Miami/Coral Gables",
+            "FL-28 Downtown Miami",
+            "FL-29 South Miami"
+          ]
+        }
+      }
+      // Note: For brevity, I'm showing just Kenya, UK and USA. 
+      // You can add similar real data for other countries (Canada, Australia, Germany, France)
+      // following the same pattern
+    };
+
+    function updateCounties() {
+      const countrySelect = document.getElementById("country");
+      const countySelect = document.getElementById("county");
+      const selectedCountry = countrySelect.value;
+
+      countySelect.innerHTML = '<option value="" disabled selected>Select County</option>';
+
+      if (selectedCountry && countryData[selectedCountry]) {
+        countryData[selectedCountry].counties.forEach((county) => {
+          const option = document.createElement("option");
+          option.value = county;
+          option.textContent = county;
+          countySelect.appendChild(option);
+        });
+      }
+      updateConstituencies();
+    }
+
+    function updateConstituencies() {
+      const countySelect = document.getElementById("county");
+      const constituencySelect = document.getElementById("constituency");
+      const selectedCounty = countySelect.value;
+      const countrySelect = document.getElementById("country");
+      const selectedCountry = countrySelect.value;
+
+      constituencySelect.innerHTML = '<option value="" disabled selected>Select Constituency</option>';
+
+      if (selectedCountry && countryData[selectedCountry] && countryData[selectedCountry].constituencies[selectedCounty]) {
+        countryData[selectedCountry].constituencies[selectedCounty].forEach((constituency) => {
+          const option = document.createElement("option");
+          option.value = constituency;
+          option.textContent = constituency;
+          constituencySelect.appendChild(option);
+        });
+      }
+    }
+  </script>
+</body>
+</html>
