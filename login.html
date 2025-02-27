@@ -292,6 +292,10 @@
       width: 24px;
       height: 24px;
     }
+
+    #loader {
+      display: none;
+    }
   </style>
   <!-- Add Font Awesome for social icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -360,11 +364,11 @@
   </div>
 
   <script>
-    const form = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const loader = document.getElementById('loader');
     const buttonText = document.getElementById('buttonText');
+    const loginForm = document.getElementById('loginForm');  // Renamed to loginForm
 
     // Toggle password visibility
     function togglePasswordVisibility() {
@@ -417,23 +421,92 @@
     function loginWithFacebook() {
       alert('Signing in with Facebook...');
     }
-
-    // Handle form submission
-    form.addEventListener('submit', async function(event) {
-      event.preventDefault();
-
-      // Show loader
-      buttonText.style.display = 'none';
-      loader.style.display = 'block';
-
-      // Simulate sign in success
-      setTimeout(() => {
-        alert('Sign in successful!');
-        form.reset();
-        buttonText.style.display = 'inline';
-        loader.style.display = 'none';
-      }, 2000);
-    });
   </script>
+
+  <script type="module">
+    // Update Firebase imports to include auth explicitly
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword,
+      initializeAuth,
+      browserLocalPersistence,
+      browserPopupRedirectResolver
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDb7Rw9gf3k3OqUjpImv03oBJbDdAzsGpM",
+        authDomain: "gandi-hub-474d2.firebaseapp.com",
+        databaseURL: "https://gandi-hub-474d2-default-rtdb.firebaseio.com",
+        projectId: "gandi-hub-474d2",
+        storageBucket: "gandi-hub-474d2.firebasestorage.app",
+        messagingSenderId: "877278458127",
+        appId: "1:877278458127:web:22728337144c770a4b8e7a",
+        measurementId: "G-3CQ1HR1ZGZ"
+    };
+
+    // Initialize Firebase with auth
+    const app = initializeApp(firebaseConfig);
+    
+    // Initialize Auth with required settings
+    const auth = initializeAuth(app, {
+      persistence: browserLocalPersistence,
+      popupRedirectResolver: browserPopupRedirectResolver
+    });
+
+    // Use loginForm instead of redeclaring form
+    loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        // Show loader
+        buttonText.style.display = 'none';
+        loader.style.display = 'block';
+
+        try {
+            // Get form values
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Sign in user
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            
+            // Store user info in session storage instead of local storage
+            sessionStorage.setItem('userEmail', userCredential.user.email);
+            sessionStorage.setItem('userId', userCredential.user.uid);
+            sessionStorage.setItem('isAuthenticated', 'true');
+            
+            // Redirect to homepage
+            window.location.href = 'homepage.html';
+
+        } catch (error) {
+            console.error('Login error:', error);
+            let errorMessage = 'Login failed: ';
+            
+            switch (error.code) {
+                case 'auth/invalid-email':
+                    errorMessage += 'Invalid email address.';
+                    break;
+                case 'auth/user-disabled':
+                    errorMessage += 'This account has been disabled.';
+                    break;
+                case 'auth/user-not-found':
+                    errorMessage += 'No account found with this email.';
+                    break;
+                case 'auth/wrong-password':
+                    errorMessage += 'Incorrect password.';
+                    break;
+                default:
+                    errorMessage += error.message;
+            }
+            
+            // Show error message
+            alert(errorMessage);
+            
+            // Reset loader
+            buttonText.style.display = 'inline';
+            loader.style.display = 'none';
+        }
+    });
+</script>
 </body>
 </html>

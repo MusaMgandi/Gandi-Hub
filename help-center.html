@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - Gandi-Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007BFF;
+            --secondary-color: #0056b3;
+            --background-color: #f8f9fa;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-color);
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .help-header {
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: -30px auto 40px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            border: none;
+            box-shadow: var(--card-shadow);
+            font-size: 1rem;
+            padding-left: 50px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 35px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 40px;
+        }
+
+        .categories {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-item:hover {
+            background: rgba(0, 123, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .category-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .category-item i {
+            margin-right: 10px;
+        }
+
+        .content-area {
+            display: grid;
+            gap: 20px;
+        }
+
+        .help-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .help-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .help-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .article-list {
+            list-style: none;
+        }
+
+        .article-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .article-item:hover {
+            background: rgba(0, 123, 255, 0.05);
+            transform: translateX(10px);
+        }
+
+        .article-item i {
+            color: var(--primary-color);
+        }
+
+        .contact-support {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .support-button {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .support-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .categories {
+                position: static;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="help-header">
+        <h1>How can we help you?</h1>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search for help articles...">
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="categories">
+            <div class="category-item active">
+                <i class="fas fa-home"></i>
+                <span>Getting Started</span>
+            </div>
+            <div class="category-item">
+                <i class="fas fa-dumbbell"></i>
+                <span>Training</span>
+            </div>
+            <div class="category-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Academics</span>
+            </div>
+            <div class="category-item">
+                <i class="fas fa-robot"></i>
+                <span>AI Features</span>
+            </div>
+            <div class="category-item">
+                <i class="fas fa-cog"></i>
+                <span>Account Settings</span>
+            </div>
+            <div class="category-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Privacy & Security</span>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <section class="help-card">
+                <h2><i class="fas fa-star"></i> Popular Articles</h2>
+                <ul class="article-list" id="popularArticles">
+                    <li class="article-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>How to create your first training schedule</span>
+                    </li>
+                    <li class="article-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Setting up academic goals and tracking</span>
+                    </li>
+                    <li class="article-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Using the AI assistant for personalized advice</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="help-card">
+                <h2><i class="fas fa-video"></i> Video Tutorials</h2>
+                <ul class="article-list" id="videoTutorials">
+                    <li class="article-item">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Quick Start Guide</span>
+                    </li>
+                    <li class="article-item">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Advanced Training Features</span>
+                    </li>
+                    <li class="article-item">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Academic Progress Tracking</span>
+                    </li>
+                </ul>
+            </section>
+
+            <div class="contact-support">
+                <h3>Need more help?</h3>
+                <p>Our support team is available 24/7 to assist you</p>
+                <a href="contact.html" class="support-button">
+                    <i class="fas fa-headset"></i> Contact Support
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        const articles = document.querySelectorAll('.article-item');
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            articles.forEach(article => {
+                const text = article.textContent.toLowerCase();
+                article.style.display = text.includes(searchTerm) ? 'flex' : 'none';
+            });
+        });
+
+        // Category selection
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active class from all items
+                document.querySelectorAll('.category-item').forEach(i => 
+                    i.classList.remove('active'));
+                // Add active class to clicked item
+                item.classList.add('active');
+                
+                // Here you would typically load category-specific content
+                loadCategoryContent(item.textContent.trim());
+            });
+        });
+
+        function loadCategoryContent(category) {
+            // Simulate loading content
+            console.log(`Loading content for ${category}`);
+            // In a real application, you would fetch and display
+            // category-specific articles here
+        }
+
+        // Article click handling
+        document.querySelectorAll('.article-item').forEach(article => {
+            article.addEventListener('click', () => {
+                // Here you would typically navigate to the full article
+                console.log('Opening article:', article.textContent.trim());
+            });
+        });
+    </script>
+</body>
+</html>

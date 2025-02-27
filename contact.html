@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Gandi-Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007BFF;
+            --secondary-color: #0056b3;
+            --success-color: #28a745;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+        }
+
+        .contact-info {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            transition: transform 0.3s ease;
+        }
+
+        .info-item:hover {
+            transform: translateX(10px);
+            background: rgba(0, 123, 255, 0.1);
+        }
+
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+        }
+
+        .info-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .contact-form {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .map-container {
+            grid-column: 1 / -1;
+            height: 400px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .success-message {
+            display: none;
+            background: var(--success-color);
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Live Chat Styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: none;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .chat-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            height: 300px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .chat-input {
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--box-shadow);
+            z-index: 999;
+        }
+
+        /* File Upload Styles */
+        .file-upload {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+            background: rgba(0, 123, 255, 0.05);
+        }
+
+        /* Social Media Contact */
+        .social-contact {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Contact Preference */
+        .preference-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .preference-option {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .preference-option.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Office Hours Indicator */
+        .office-hours {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .status-indicator.open {
+            background: var(--success-color);
+        }
+
+        .status-indicator.closed {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="contact-info">
+            <h2>Contact Information</h2>
+            <div class="info-item">
+                <div class="info-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="info-content">
+                    <h3>Address</h3>
+                    <p>Westlands, Nairobi, Kenya</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="info-content">
+                    <h3>Phone</h3>
+                    <p>+254 34 880 3177</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="info-content">
+                    <h3>Email</h3>
+                    <p>support@gandihub.co.ke</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="info-content">
+                    <h3>Working Hours</h3>
+                    <p>Mon - Fri: 8:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+            <div class="social-contact">
+                <a href="#" class="social-icon" style="background: #1DA1F2;"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" style="background: #4267B2;"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon" style="background: #0077B5;"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon" style="background: #25D366;"><i class="fab fa-whatsapp"></i></a>
+            </div>
+
+            <div class="office-hours">
+                <h4><span class="status-indicator" id="statusIndicator"></span> Office Status</h4>
+                <p id="officeStatus">Checking availability...</p>
+            </div>
+        </div>
+
+        <div class="contact-form">
+            <h2>Send us a Message</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" required>
+                        <option value="">Select a subject</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="support">Technical Support</option>
+                        <option value="feedback">Feedback</option>
+                        <option value="partnership">Partnership</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" required></textarea>
+                </div>
+                <div class="preference-options">
+                    <div class="preference-option" data-value="email">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email</span>
+                    </div>
+                    <div class="preference-option" data-value="phone">
+                        <i class="fas fa-phone"></i>
+                        <span>Phone</span>
+                    </div>
+                    <div class="preference-option" data-value="chat">
+                        <i class="fas fa-comments"></i>
+                        <span>Chat</span>
+                    </div>
+                </div>
+
+                <div class="file-upload" id="fileUpload">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drop files here or click to upload</p>
+                    <input type="file" hidden id="fileInput" multiple>
+                </div>
+                <button type="submit">Send Message</button>
+                <div class="success-message" id="successMessage">
+                    Message sent successfully! We'll get back to you soon.
+                </div>
+            </form>
+        </div>
+
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.344754054274!2d36.80943441744385!3d-1.2675755999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f173c0a1f9de7%3A0xad2c84df1f7f2ec8!2sWestlands%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1652913014528!5m2!1sen!2ske" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="chat-toggle" id="chatToggle">
+        <i class="fas fa-comments"></i>
+    </div>
+
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header">
+            <span>Live Chat</span>
+            <i class="fas fa-times" id="chatClose"></i>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be added here -->
+        </div>
+        <div class="chat-input">
+            <input type="text" placeholder="Type your message..." id="chatInput">
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb7Rw9gf3k3OqUjpImv03oBJbDdAzsGpM",
+            authDomain: "gandi-hub-474d2.firebaseapp.com",
+            projectId: "gandi-hub-474d2",
+            storageBucket: "gandi-hub-474d2.firebasestorage.app",
+            messagingSenderId: "877278458127",
+            appId: "1:877278458127:web:22728337144c770a4b8e7a",
+            measurementId: "G-3CQ1HR1ZGZ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+
+        // Handle form submission
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                await push(ref(db, 'messages'), formData);
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('contactForm').reset();
+                setTimeout(() => {
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 5000);
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Error sending message. Please try again.');
+            }
+        });
+
+        // File Upload Handling
+        const fileUpload = document.getElementById('fileUpload');
+        const fileInput = document.getElementById('fileInput');
+
+        fileUpload.addEventListener('click', () => fileInput.click());
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
+        });
+
+        fileInput.addEventListener('change', handleFiles);
+
+        function handleFiles(e) {
+            const files = e.target.files;
+            // Handle file upload logic here
+        }
+
+        // Contact Preference Selection
+        document.querySelectorAll('.preference-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.preference-option').forEach(opt => 
+                    opt.classList.remove('active'));
+                option.classList.add('active');
+            });
+        });
+
+        // Live Chat Widget
+        const chatToggle = document.getElementById('chatToggle');
+        const chatWidget = document.getElementById('chatWidget');
+        const chatClose = document.getElementById('chatClose');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        chatToggle.addEventListener('click', () => {
+            chatWidget.style.display = 'block';
+            chatToggle.style.display = 'none';
+        });
+
+        chatClose.addEventListener('click', () => {
+            chatWidget.style.display = 'none';
+            chatToggle.style.display = 'flex';
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && chatInput.value.trim()) {
+                addMessage('user', chatInput.value);
+                chatInput.value = '';
+            }
+        });
+
+        function addMessage(sender, text) {
+            const message = document.createElement('div');
+            message.className = `chat-message ${sender}`;
+            message.textContent = text;
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Office Hours Checker
+        function checkOfficeHours() {
+            const now = new Date();
+            const day = now.getDay();
+            const hour = now.getHours();
+            const isWorkDay = day >= 1 && day <= 5;
+            const isWorkHour = hour >= 8 && hour < 18;
+            const statusIndicator = document.getElementById('statusIndicator');
+            const officeStatus = document.getElementById('officeStatus');
+
+            if (isWorkDay && isWorkHour) {
+                statusIndicator.className = 'status-indicator open';
+                officeStatus.textContent = 'We are currently open';
+            } else {
+                statusIndicator.className = 'status-indicator closed';
+                officeStatus.textContent = 'We are currently closed';
+            }
+        }
+
+        // Update office hours status every minute
+        checkOfficeHours();
+        setInterval(checkOfficeHours, 60000);
+    </script>
+</body>
+</html>

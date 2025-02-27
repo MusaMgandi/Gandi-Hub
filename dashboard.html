@@ -1,0 +1,123 @@
+<header class="header">
+    <h1>Training Dashboard</h1>
+    <button class="add-routine-btn">
+        <i class="fas fa-plus"></i> New Routine
+    </button>
+</header>
+
+<div class="content-grid">
+    <!-- Quick Stats Section -->
+    <div class="card">
+        <h3>Quick Stats</h3>
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-value">85%</div>
+                <div class="stat-label">Attendance</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Sessions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">4.5</div>
+                <div class="stat-label">Rating</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Today's Schedule -->
+    <div class="card">
+        <h3>Today's Schedule</h3>
+        <div class="schedule">
+            <div class="schedule-item">
+                <span>Morning Run</span>
+                <span>6:00 AM</span>
+            </div>
+            <div class="schedule-item">
+                <span>Weight Training</span>
+                <span>8:00 AM</span>
+            </div>
+            <div class="schedule-item">
+                <span>Team Practice</span>
+                <span>4:00 PM</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Notes with Save Feature -->
+    <div class="card">
+        <h3>Quick Notes</h3>
+        <textarea id="noteInput" placeholder="Add a note about today's training..."></textarea>
+        <button class="save-note-btn" onclick="saveNote()">Save Note</button>
+        <div id="savedNotes"></div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <div class="card">
+        <h3>Upcoming Events</h3>
+        <ul class="events-list">
+            <li class="event-item">
+                <span>Team Selection</span>
+                <span class="event-date">Mar 20</span>
+            </li>
+            <li class="event-item">
+                <span>Fitness Assessment</span>
+                <span class="event-date">Mar 22</span>
+            </li>
+            <li class="event-item">
+                <span>Rugby Tournament</span>
+                <span class="event-date">Mar 25</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    function saveNote() {
+        const noteInput = document.getElementById('noteInput');
+        const savedNotes = document.getElementById('savedNotes');
+        
+        if (noteInput.value.trim() !== '') {
+            const noteDiv = document.createElement('div');
+            noteDiv.style.padding = '10px';
+            noteDiv.style.marginTop = '10px';
+            noteDiv.style.background = '#f8f9fa';
+            noteDiv.style.borderRadius = '5px';
+            
+            const date = new Date().toLocaleString();
+            noteDiv.innerHTML = `
+                <small style="color: #666">${date}</small>
+                <p style="margin: 5px 0">${noteInput.value}</p>
+            `;
+            
+            savedNotes.insertBefore(noteDiv, savedNotes.firstChild);
+            noteInput.value = '';
+            
+            // Save to local storage
+            const notes = JSON.parse(localStorage.getItem('trainingNotes') || '[]');
+            notes.unshift({ date, text: noteInput.value });
+            localStorage.setItem('trainingNotes', JSON.stringify(notes));
+        }
+    }
+
+    // Load saved notes on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        const notes = JSON.parse(localStorage.getItem('trainingNotes') || '[]');
+        const savedNotes = document.getElementById('savedNotes');
+        
+        notes.forEach(note => {
+            const noteDiv = document.createElement('div');
+            noteDiv.style.padding = '10px';
+            noteDiv.style.marginTop = '10px';
+            noteDiv.style.background = '#f8f9fa';
+            noteDiv.style.borderRadius = '5px';
+            
+            noteDiv.innerHTML = `
+                <small style="color: #666">${note.date}</small>
+                <p style="margin: 5px 0">${note.text}</p>
+            `;
+            
+            savedNotes.appendChild(noteDiv);
+        });
+    });
+</script>

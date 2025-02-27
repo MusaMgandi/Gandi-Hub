@@ -3,208 +3,869 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>More Reviews - Gandi-Hub</title>
+    <title>Reviews - Gandi-Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #007BFF;
+            --secondary-color: #0056b3;
+            --gradient: linear-gradient(135deg, #007BFF, #0056b3);
+            --background-gradient: linear-gradient(135deg, #f4f4f9, #e0e0f5);
+            --card-shadow: 0 8px 30px rgba(0, 123, 255, 0.15);
+        }
+
         body {
             font-family: 'Arial', sans-serif;
-            line-height: 1.6;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            color: #333;
-            overflow-x: hidden;
+            background: var(--background-gradient);
         }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-            overflow: hidden;
-            padding: 40px 20px;
+
+        .header {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
         }
-        h1 {
-            color: #007BFF;
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            position: relative;
-        }
-        h1::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: #007BFF;
-            margin: 10px auto 0;
-            border-radius: 5px;
-        }
-        .review-card {
-            background: #fff;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+        .header-content {
             display: flex;
             align-items: center;
-            gap: 20px;
-            transition: all 0.3s ease;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px; /* Add padding */
+            width: 100%;
+            justify-content: space-between; /* Changed from default */
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-right: auto; /* Push everything else to the right */
+        }
+
+        .logo-image {
+            height: 60px;
             cursor: pointer;
+            margin-left: 0; /* Remove any left margin */
+            padding-left: 0; /* Remove any left padding */
+        }
+
+        .back-button {
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            /* Removed margin-left: auto; */
+        }
+
+        .reviews-container {
+            max-width: 1400px;
+            margin: 120px auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--gradient);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .review-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
-        .review-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(0, 123, 255, 0.2);
-            background: linear-gradient(to right, #fff, #f8fbff);
-        }
+
         .review-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(0, 123, 255, 0.1);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
+            height: 5px;
+            background: var(--gradient);
         }
-        .review-card:hover::before {
-            opacity: 1;
+
+        .review-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 123, 255, 0.2);
         }
-        .profile-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-            image-rendering: auto;
-        }
-        .profile-image:hover {
-            transform: scale(1.2);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-        .review-text {
-            flex: 1;
-        }
-        .review-text p {
-            font-size: 1rem;
-            color: #555;
-            margin-bottom: 10px;
-        }
-        .author {
-            font-style: italic;
-            color: #777;
-            font-size: 0.9rem;
-        }
-        .rating-container {
-            position: absolute;
-            bottom: 15px;
-            right: 20px;
+
+        .reviewer-info {
             display: flex;
             align-items: center;
-            gap: 5px;
+            margin-bottom: 1.5rem;
+            position: relative;
         }
-        .stars {
-            color: #FFD700;
-            font-size: 18px;
+
+        .reviewer-image-container {
+            position: relative;
+            margin-right: 1.5rem;
         }
-        .rating-text {
+
+        .reviewer-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .reviewer-image:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+        }
+
+        .verification-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--gradient);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+        }
+
+        .reviewer-details {
+            flex-grow: 1;
+        }
+
+        .reviewer-details h3 {
+            font-size: 1.4rem;
+            margin: 0;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .reviewer-details p {
+            margin: 0.5rem 0 0;
             color: #666;
-            font-size: 14px;
-            margin-left: 5px;
+            font-size: 1.1rem;
         }
+
+        .rating {
+            color: #FFD700;
+            font-size: 1.3rem;
+            margin: 1rem 0;
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .review-content {
+            color: #444;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .review-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 123, 255, 0.1);
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .review-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .action-btn.liked {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .comments-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 123, 255, 0.1);
+            display: none;
+        }
+
+        .comments-section.active {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .comment-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .comment-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .submit-comment {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-comment:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .comment-item {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @media (max-width: 768px) {
-            .review-card {
-                flex-direction: column;
-                text-align: center;
+            .review-grid {
+                grid-template-columns: 1fr;
             }
-            .profile-image {
-                margin-bottom: 15px;
-            }
-            .rating-container {
-                position: static;
-                margin-top: 10px;
+
+            .reviewer-image {
+                width: 80px;
+                height: 80px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>More Reviews for Gandi-Hub</h1>
-
-        <div class="review-card">
-            <img src="rugby6.jpg" alt="Sarah L." class="profile-image">
-            <div class="review-text">
-                <p>"Gandi-Hub has been a game-changer for balancing my rugby training with my studies. The AI assistant is incredibly helpful!"</p>
-                <p class="author">- Sarah L., University Rugby Player</p>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="images/rugbylogo.png" alt="Gandi-Hub Logo" class="logo-image" onclick="window.location.href='Gandi-hub.html'">
             </div>
-            <div class="rating-container">
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <span class="rating-text">5.0</span>
-            </div>
+            <button class="back-button" onclick="window.location.href='Gandi-hub.html'">Back to Home</button>
         </div>
+    </header>
 
-        <div class="review-card">
-            <img src="rugby8.jpg" alt="Coach Mark T." class="profile-image">
-            <div class="review-text">
-                <p>"I've seen a significant improvement in my team's performance since we started using Gandi-Hub. Highly recommended for coaches!"</p>
-                <p class="author">- Coach Mark T., High School Rugby Coach</p>
-            </div>
-            <div class="rating-container">
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <span class="rating-text">5.0</span>
-            </div>
+    <div class="reviews-container">
+        <div class="section-title">
+            <h1>What Our Users Say</h1>
+            <p>Real experiences from our community members</p>
         </div>
-
-        <div class="review-card">
-            <img src="rugby9.jpg" alt="David K." class="profile-image">
-            <div class="review-text">
-                <p>"As a student-athlete, Gandi-Hub helps me stay organized and on top of my commitments. It's like having a personal assistant!"</p>
-                <p class="author">- David K., College Athlete</p>
-            </div>
-            <div class="rating-container">
-                <div class="stars">
+        
+        <div class="review-grid">
+            <div class="review-card">
+                <div class="reviewer-info">
+                    <div class="reviewer-image-container">
+                        <img src="images/rugby2.jpg" alt="Musa Mgandi" class="reviewer-image">
+                        <i class="fas fa-check-circle verification-badge"></i>
+                    </div>
+                    <div class="reviewer-details">
+                        <h3>Musa Mgandi</h3>
+                        <p>Rugby Player</p>
+                    </div>
+                </div>
+                <div class="rating">
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                 </div>
-                <span class="rating-text">5.0</span>
+                <p class="review-content">"Gandi-Hub has transformed the way I manage my rugby and academic life. The AI chatbot is a game-changer! I can easily track my progress and stay organized."</p>
+                <div class="review-footer">
+                    <span class="review-date">Posted March 13, 2024</span>
+                    <div class="review-actions">
+                        <button class="action-btn like-btn" onclick="toggleLike(this)">
+                            <i class="far fa-thumbs-up"></i>
+                            <span class="like-count">45</span>
+                        </button>
+                        <button class="action-btn comment-btn" onclick="toggleComments(this)">
+                            <i class="far fa-comment"></i>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="comments-section">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Write a comment...">
+                        <button class="submit-comment" onclick="addComment(this)">Post</button>
+                    </div>
+                    <div class="comments-list">
+                        <!-- Comments will be added here dynamically -->
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="review-card">
-            <img src="rugby10.jpg" alt="Isiah R." class="profile-image">
-            <div class="review-text">
-                <p>"The AI-powered insights are invaluable for optimizing my training schedule and academic workload. Gandi-Hub is a must-have tool!"</p>
-                <p class="author">- Isiah R., Elite Rugby Player</p>
-            </div>
-            <div class="rating-container">
-                <div class="stars">
+            <div class="review-card">
+                <div class="reviewer-info">
+                    <div class="reviewer-image-container">
+                        <img src="images/rugby1.jpg" alt="Vincent Onyala" class="reviewer-image">
+                        <i class="fas fa-check-circle verification-badge"></i>
+                    </div>
+                    <div class="reviewer-details">
+                        <h3>Vincent Onyala</h3>
+                        <p>Student Athlete</p>
+                    </div>
+                </div>
+                <div class="rating">
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                 </div>
-                <span class="rating-text">5.0</span>
+                <p class="review-content">"The progress tracking feature keeps me motivated and on top of my goals. The platform has helped me maintain a perfect balance between sports and studies."</p>
+                <div class="review-footer">
+                    <span class="review-date">Posted March 10, 2024</span>
+                    <div class="review-actions">
+                        <button class="action-btn like-btn" onclick="toggleLike(this)">
+                            <i class="far fa-thumbs-up"></i>
+                            <span class="like-count">30</span>
+                        </button>
+                        <button class="action-btn comment-btn" onclick="toggleComments(this)">
+                            <i class="far fa-comment"></i>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="comments-section">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Write a comment...">
+                        <button class="submit-comment" onclick="addComment(this)">Post</button>
+                    </div>
+                    <div class="comments-list">
+                        <!-- Comments will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <div class="reviewer-info">
+                    <div class="reviewer-image-container">
+                        <img src="images/rugby01.jpg" alt="Mike Johnson" class="reviewer-image">
+                        <i class="fas fa-check-circle verification-badge"></i>
+                    </div>
+                    <div class="reviewer-details">
+                        <h3>Mike Johnson</h3>
+                        <p>Coach</p>
+                    </div>
+                </div>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="review-content">"The reminders and notes feature is a lifesaver. My team never misses a training session or assignment deadline. Great tool for team management!"</p>
+                <div class="review-footer">
+                    <span class="review-date">Posted March 8, 2024</span>
+                    <div class="review-actions">
+                        <button class="action-btn like-btn" onclick="toggleLike(this)">
+                            <i class="far fa-thumbs-up"></i>
+                            <span class="like-count">25</span>
+                        </button>
+                        <button class="action-btn comment-btn" onclick="toggleComments(this)">
+                            <i class="far fa-comment"></i>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="comments-section">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Write a comment...">
+                        <button class="submit-comment" onclick="addComment(this)">Post</button>
+                    </div>
+                    <div class="comments-list">
+                        <!-- Comments will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Review 1 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="images/rev1.png" alt="Reviewer" class="reviewer-image">
+                    <div class="reviewer-info">
+                        <h3>Ian Johnson</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"The training resources here are incredible. Really helped improve my game awareness and tactical understanding."</p>
+
+                <div class="review-footer">
+                    <span class="review-date">Posted March 15, 2024</span>
+                    <div class="review-actions">
+                        <button class="action-btn like-btn" onclick="toggleLike(this)">
+                            <i class="far fa-thumbs-up"></i>
+                            <span class="like-count">45</span>
+                        </button>
+                        <button class="action-btn comment-btn" onclick="toggleComments(this)">
+                            <i class="far fa-comment"></i>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="comments-section">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Write a comment...">
+                        <button class="submit-comment" onclick="addComment(this)">Post</button>
+                    </div>
+                    <div class="comments-list">
+                        <!-- Comments will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Review 2 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="images/rev2.png" alt="Reviewer" class="reviewer-image">
+                    <div class="reviewer-info">
+                        <h3>Mike Thompson</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"Outstanding academic support. The study materials and tutoring have been invaluable for balancing sports and studies."</p>
+                <div class="review-footer">
+                    <span class="review-date">Posted March 12, 2024</span>
+                    <div class="review-actions">
+                        <button class="action-btn like-btn" onclick="toggleLike(this)">
+                            <i class="far fa-thumbs-up"></i>
+                            <span class="like-count">45</span>
+                        </button>
+                        <button class="action-btn comment-btn" onclick="toggleComments(this)">
+                            <i class="far fa-comment"></i>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="comments-section">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Write a comment...">
+                        <button class="submit-comment" onclick="addComment(this)">Post</button>
+                    </div>
+                    <div class="comments-list">
+                        <!-- Comments will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Review 3 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="images/rev3.png" alt="Reviewer" class="reviewer-image">
+                    <div class="reviewer-info">
+                        <h3>Emily Rodriguez</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"The AI chat feature is brilliant! Gets all my questions answered instantly. Really helpful for quick training tips."</p>
+                <div class="review-footer">
+                    <span class="review-date">Posted March 10, 2024</span>
+                    <div class="review-actions">
+                        <button class="action-btn like-btn" onclick="toggleLike(this)">
+                            <i class="far fa-thumbs-up"></i>
+                            <span class="like-count">45</span>
+                        </button>
+                        <button class="action-btn comment-btn" onclick="toggleComments(this)">
+                            <i class="far fa-comment"></i>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="comments-section">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Write a comment...">
+                        <button class="submit-comment" onclick="addComment(this)">Post</button>
+                    </div>
+                    <div class="comments-list">
+                        <!-- Comments will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Review 4 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="images/rev4.png" alt="Reviewer" class="reviewer-image">
+                    <div class="reviewer-info">
+                        <h3>Daniel Kim</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"Love the event updates and community features. Makes it easy to stay connected with the rugby community."</p>
+                <div class="review-footer">
+                    <span class="review-date">Posted March 8, 2024</span>
+                    <div class="review-actions">
+                        <button class="action-btn like-btn" onclick="toggleLike(this)">
+                            <i class="far fa-thumbs-up"></i>
+                            <span class="like-count">45</span>
+                        </button>
+                        <button class="action-btn comment-btn" onclick="toggleComments(this)">
+                            <i class="far fa-comment"></i>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="comments-section">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Write a comment...">
+                        <button class="submit-comment" onclick="addComment(this)">Post</button>
+                    </div>
+                    <div class="comments-list">
+                        <!-- Comments will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Review 5 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="images/rev5.png" alt="Reviewer" class="reviewer-image">
+                    <div class="reviewer-info">
+                        <h3>Ramah Chen</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"The personalized training programs have really helped me improve my skills. Great progress tracking too!"</p>
+                <div class="review-footer">
+                    <span class="review-date">Posted March 5, 2024</span>
+                    <div class="review-actions">
+                        <button class="action-btn like-btn" onclick="toggleLike(this)">
+                            <i class="far fa-thumbs-up"></i>
+                            <span class="like-count">45</span>
+                        </button>
+                        <button class="action-btn comment-btn" onclick="toggleComments(this)">
+                            <i class="far fa-comment"></i>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="comments-section">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Write a comment...">
+                        <button class="submit-comment" onclick="addComment(this)">Post</button>
+                    </div>
+                    <div class="comments-list">
+                        <!-- Comments will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Review 6 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="images/rev6.png" alt="Reviewer" class="reviewer-image">
+                    <div class="reviewer-info">
+                        <h3>James Wilson</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"Excellent resource for both beginners and experienced players. The video tutorials are particularly helpful."</p>
+                <div class="review-footer">
+                    <span class="review-date">Posted March 3, 2024</span>
+                    <div class="review-actions">
+                        <button class="action-btn like-btn" onclick="toggleLike(this)">
+                            <i class="far fa-thumbs-up"></i>
+                            <span class="like-count">45</span>
+                        </button>
+                        <button class="action-btn comment-btn" onclick="toggleComments(this)">
+                            <i class="far fa-comment"></i>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="comments-section">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Write a comment...">
+                        <button class="submit-comment" onclick="addComment(this)">Post</button>
+                    </div>
+                    <div class="comments-list">
+                        <!-- Comments will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Review 7 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="images/rev7.png" alt="Reviewer" class="reviewer-image">
+                    <div class="reviewer-info">
+                        <h3>Aron Parker</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"The academic support and rugby training integration is perfect. Really helps maintain a good balance."</p>
+                <div class="review-footer">
+                    <span class="review-date">Posted March 1, 2024</span>
+                    <div class="review-actions">
+                        <button class="action-btn like-btn" onclick="toggleLike(this)">
+                            <i class="far fa-thumbs-up"></i>
+                            <span class="like-count">45</span>
+                        </button>
+                        <button class="action-btn comment-btn" onclick="toggleComments(this)">
+                            <i class="far fa-comment"></i>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="comments-section">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Write a comment...">
+                        <button class="submit-comment" onclick="addComment(this)">Post</button>
+                    </div>
+                    <div class="comments-list">
+                        <!-- Comments will be added here dynamically -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleLike(button) {
+            button.classList.toggle('liked');
+            const likeCount = button.querySelector('.like-count');
+            const currentLikes = parseInt(likeCount.textContent);
+            
+            if (button.classList.contains('liked')) {
+                likeCount.textContent = currentLikes + 1;
+                button.querySelector('i').className = 'fas fa-thumbs-up';
+            } else {
+                likeCount.textContent = currentLikes - 1;
+                button.querySelector('i').className = 'far fa-thumbs-up';
+            }
+        }
+
+        function toggleComments(button) {
+            const reviewCard = button.closest('.review-card');
+            const commentsSection = reviewCard.querySelector('.comments-section');
+            commentsSection.classList.toggle('active');
+        }
+
+        function addComment(button) {
+            const reviewCard = button.closest('.review-card');
+            const input = reviewCard.querySelector('.comment-input');
+            const commentsList = reviewCard.querySelector('.comments-list');
+            
+            if (input.value.trim()) {
+                const comment = document.createElement('div');
+                comment.className = 'comment-item';
+                comment.innerHTML = `
+                    <div class="comment-header">
+                        <span class="comment-author">User</span>
+                        <span>Just now</span>
+                    </div>
+                    <div class="comment-text">${input.value}</div>
+                `;
+                
+                commentsList.insertBefore(comment, commentsList.firstChild);
+                input.value = '';
+            }
+        }
+    </script>
+    <script type="module">
+        import { db } from './firebase-config.js';
+        import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        async function loadReviews() {
+            try {
+                const reviewsQuery = query(
+                    collection(db, "reviews"),
+                    orderBy("date", "desc")
+                );
+
+                const snapshot = await getDocs(reviewsQuery);
+                const reviewsContainer = document.querySelector('.review-grid');
+                
+                // Clear existing reviews
+                reviewsContainer.innerHTML = '';
+
+                snapshot.forEach(doc => {
+                    const review = doc.data();
+                    const reviewCard = createReviewCard(review);
+                    reviewsContainer.insertAdjacentHTML('beforeend', reviewCard);
+                });
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+            }
+        }
+
+        function createReviewCard(review) {
+            return `
+                <div class="review-card">
+                    <div class="reviewer-info">
+                        <div class="reviewer-image-container">
+                            <img src="${review.profileImage || 'images/default-avatar.png'}" alt="${review.username}" class="reviewer-image">
+                            <i class="fas fa-check-circle verification-badge"></i>
+                        </div>
+                        <div class="reviewer-details">
+                            <h3>${review.username}</h3>
+                            <p>${review.fullName}</p>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        ${Array(5).fill('').map((_, i) => 
+                            `<i class="${i < review.rating ? 'fas' : 'far'} fa-star"></i>`
+                        ).join('')}
+                    </div>
+                    <p class="review-content">"${review.comment}"</p>
+                    <div class="review-footer">
+                        <span class="review-date">Posted ${new Date(review.date).toLocaleDateString()}</span>
+                        <!-- ... existing actions ... -->
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load reviews when page loads
+        document.addEventListener('DOMContentLoaded', loadReviews);
+    </script>
 </body>
 </html>

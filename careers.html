@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers - Gandi-Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007BFF;
+            --secondary-color: #0056b3;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 30px;
+        }
+
+        /* Job Listings */
+        .job-listings {
+            display: grid;
+            gap: 30px;
+        }
+
+        .job-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .job-header {
+            background: #e3f2fd;
+            padding: 25px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .job-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .job-location {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .job-description {
+            padding: 25px;
+        }
+
+        .job-description p {
+            margin-bottom: 15px;
+        }
+
+        .job-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px;
+            border-top: 1px solid #ddd;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .apply-button {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-decoration: none;
+        }
+
+        .apply-button:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .sidebar-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .culture-section {
+            text-align: center;
+        }
+
+        .culture-image {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .application-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 5px;
+        }
+
+        label {
+            font-weight: 500;
+        }
+
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-button {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Join Our Team</h1>
+        <p>Discover exciting career opportunities at Gandi-Hub</p>
+    </header>
+
+    <div class="container">
+        <main class="job-listings">
+            <!-- Job Card 1 -->
+            <article class="job-card">
+                <div class="job-header">
+                    <h2 class="job-title">Full Stack Developer</h2>
+                    <p class="job-location">Nairobi, Kenya</p>
+                </div>
+                <div class="job-description">
+                    <p>We are looking for a talented Full Stack Developer to join our team. You will be responsible for developing and maintaining both front-end and back-end components of our platform.</p>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop and maintain web applications</li>
+                        <li>Write clean, efficient, and well-documented code</li>
+                        <li>Collaborate with team members</li>
+                    </ul>
+                </div>
+                <div class="job-meta">
+                    <span>Posted 3 days ago</span>
+                    <a href="#" class="apply-button">Apply Now</a>
+                </div>
+            </article>
+
+            <!-- Job Card 2 -->
+            <article class="job-card">
+                <div class="job-header">
+                    <h2 class="job-title">AI Research Scientist</h2>
+                    <p class="job-location">Remote</p>
+                </div>
+                <div class="job-description">
+                    <p>We are seeking an AI Research Scientist to help us develop cutting-edge AI solutions for student-athletes. You will work on projects related to personalized training and academic support.</p>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>Research and implement AI algorithms</li>
+                        <li>Analyze large datasets</li>
+                        <li>Publish research findings</li>
+                    </ul>
+                </div>
+                <div class="job-meta">
+                    <span>Posted 1 week ago</span>
+                    <a href="#" class="apply-button">Apply Now</a>
+                </div>
+            </article>
+        </main>
+
+        <aside class="sidebar">
+            <!-- Culture Section -->
+            <div class="sidebar-section culture-section">
+                <h3 class="sidebar-title">Our Culture</h3>
+                <img src="images/team-culture.jpg" alt="Team Culture" class="culture-image">
+                <p>At Gandi-Hub, we value innovation, collaboration, and a passion for helping student-athletes succeed. Join us and be part of a dynamic team!</p>
+            </div>
+
+            <!-- Application Form -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Submit Your Application</h3>
+                <form class="application-form" id="applicationForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="resume">Resume URL</label>
+                        <input type="url" id="resume" placeholder="Paste your resume link" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="coverLetter">Cover Letter</label>
+                        <textarea id="coverLetter" rows="5" placeholder="Write a brief cover letter"></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">Submit Application</button>
+                </form>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Application Form Submission
+        document.getElementById('applicationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                resume: document.getElementById('resume').value,
+                coverLetter: document.getElementById('coverLetter').value,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                // Implement application submission logic
+                console.log('Submitting application:', formData);
+                alert('Thank you for your application!');
+                e.target.reset();
+            } catch (error) {
+                console.error('Application error:', error);
+                alert('Error submitting application. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

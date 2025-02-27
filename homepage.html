@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Hub - Gandi-Hub</title>
+    <style>
+        /* Image Gallery Styles */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            width: 100vw;
+            margin: 0 -10px;
+            min-height: 75vh; /* Reduced from 90vh */
+            overflow: visible;
+        }
+
+        .image-container {
+            position: relative;
+            height: 750px; /* Reduced from 800px */
+            margin: 0 -5px;
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .image-container:first-child {
+            border-radius: 10px 0 0 10px;
+            margin-left: 0; /* Remove margin that was pushing content right */
+            overflow: hidden; /* Ensure content stays within borders */
+        }
+
+        .image-container:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .image-wrapper {
+            width: 100%; /* Changed from calc(100% + 80px) */
+            height: 100%;
+            margin-left: 0; /* Removed negative margin */
+            position: relative;
+            padding-left: 0;
+            transform-style: preserve-3d; /* Add this to create a new stacking context */
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: all 0.5s ease;
+            margin: 0; /* Ensure no margin */
+            padding: 0; /* Ensure no padding */
+        }
+
+        .image-container:hover .gallery-image,
+        .image-label:hover ~ .gallery-image,
+        .image-wrapper:hover .gallery-image {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .image-gallery {
+                grid-template-columns: 1fr;
+            }
+            .image-container {
+                height: 30px; /* Reduced from 400px */
+                margin: 0;
+                border-radius: 0 !important;
+            }
+        }
+
+        /* Modern Footer Styles */
+        .modern-footer {
+            background: #0a0f1d;
+            color: #ffffff;
+            padding: 2rem 0; /* Reduced from 4rem */
+            font-family: 'Inter', sans-serif;
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem; /* Reduced from 3rem */
+            padding-bottom: 1rem; /* Reduced from 2rem */
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1rem; /* Reduced from 2rem */
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .footer-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #e8e8e8;
+        }
+
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem; /* Reduced from 2rem */
+        }
+
+        .link-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem; /* Reduced from 0.75rem */
+        }
+
+        .footer-link {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Remove the underline effect */
+        .footer-link::after {
+            display: none;
+        }
+
+        .footer-link:hover {
+            color: #007BFF;
+            animation: pulsate 1s ease-in-out infinite;
+        }
+
+        @keyframes pulsate {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+                color: #1e90ff;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .newsletter-box {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            background: transparent;
+            color: white;
+        }
+
+        .newsletter-button {
+            background: #48bb78;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .legal-section {
+            text-align: center;
+            color: #718096;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .link-grid {
+                grid-template-columns: 1fr;
+            }
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+        .image-label {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2rem; /* Standardized base font size for all labels */
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            padding: 8px 16px;
+            z-index: 2;
+            transition: all 0.5s ease; /* Increased transition time */
+            letter-spacing: 1px;
+            background: none;
+            pointer-events: auto;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.3); /* Semi-transparent background */
+            padding: 10px 20px;
+            border-radius: 8px;
+            justify-content: center;
+            flex-direction: row;
+            white-space: nowrap;
+            min-width: 180px;
+        }
+
+        .calendar-icon,
+        .training-icon,
+        .fa-pen,
+        .fa-book-open,
+        .robot-icon {
+            font-size: 1.8rem; /* Standardized icon size */
+            margin-right: 8px;
+        }
+
+        .image-container:hover .image-label {
+            animation: labelPulsate 2s ease-in-out infinite;
+            background: rgba(0, 0, 0, 0.5);
+            font-size: 2.2rem; /* Standardized hover font size */
+            transform: translateX(-50%); /* Keep centered */
+        }
+
+        .image-container:hover .calendar-icon,
+        .image-container:hover .training-icon,
+        .image-container:hover .fa-pen,
+        .image-container:hover .fa-book-open,
+        .image-container:hover .robot-icon {
+            font-size: 2rem; /* Standardized hover icon size */
+        }
+
+        .icon-group {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+            transform: none;
+        }
+
+        .training-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fa-football-ball {
+            margin: 0;
+            transform: none;
+        }
+
+        .academics-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-stack {
+            position: relative;
+            display: inline-flex; /* Changed from flex to inline-flex */
+            align-items: center;
+            justify-content: center;
+            width: 2em; /* Adjust as needed */
+            height: 2em; /* Adjust as needed */
+        }
+
+        .icon-stack i {
+            position: absolute;
+            font-size: 1em; /* Reduced size */
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .fa-pen {
+            transform: none;
+            z-index: 2;
+            top: -0.2em; /* Adjust to position pen slightly above book */
+            left: 0.4em; /* Adjust to position pen slightly to the right */
+            font-size: 0.6em; /* Reduced size even further */
+        }
+
+        .fa-book-open {
+            z-index: 1;
+            margin: 0;
+            transform: none;
+        }
+
+        .book-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .book-lines {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .book-line {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.8); /* Changed from white to black */
+            width: 100%;
+            box-shadow: 0 0 2px rgba(255, 255, 255, 0.5); /* Added subtle white glow */
+        }
+
+        .ai-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem; /* Reduced from 2.2rem */
+        }
+
+        .robot-icon {
+            margin-right: 8px;
+        }
+
+        .image-container:hover .ai-label {
+            font-size: 2rem; /* Reduced from 2.4rem */
+        }
+
+        @keyframes textPulsate {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes labelPulsate {
+            0% {
+                transform: translateX(-50%) scale(1);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.1);
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            }
+        }
+
+        .image-label:hover {
+            animation: textPulsate 2s ease-in-out infinite;
+        }
+
+        .image-label > *:not(i) { /* Target text but not icons */
+            transition: all 0.5s ease;
+        }
+
+        .image-label:hover > *:not(i) {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .logo-overlay {
+            position: fixed; /* Changed from absolute to fixed */
+            top: -20  px;  /* Reduced from 20px */
+            left: -10px; /* Reduced from 50px */
+            z-index: 1010; /* Increased z-index to stay above other elements */
+            width: 110px;  /* Reduced from 150px */
+            height: 120px; /* Reduced from 150px */
+            border-radius: 50%;
+            background: none;
+            padding: 0;
+            pointer-events: none;
+            transform-origin: top left; /* Add transform origin for smoother transitions */
+            transform: translateZ(0); /* Force GPU acceleration */
+            will-change: transform; /* Optimize for animations */
+        }
+
+        .logo-overlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)); /* Reduced shadow */
+            transition: transform 0.3s ease; /* Added smooth transition */
+        }
+
+        /* Optional: Add hover effect for smoother visual */
+        .logo-overlay:hover img {
+            transform: scale(1.05);
+        }
+
+        .auth-check {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007BFF;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #mainContent {
+            display: none;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.3s;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #007BFF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .loading-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin-left: 0; /* Ensure no margin */
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .profile-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            padding: 10px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .profile-icon i {
+            font-size: 24px;
+            color: #007BFF;
+        }
+
+        .profile-icon:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .profile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100vh;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            z-index: 1000;
+            color: white;
+            transform: translateX(100%); /* Start from right side */
+            transition: transform 0.3s ease-out;
+            overflow: hidden; /* Changed from auto to hidden */
+            box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+            padding-top: 0; /* Remove top padding */
+        }
+
+        .profile-overlay.active {
+            transform: translateX(0); /* Slide in from right */
+            display: block;
+        }
+
+        .profile-content-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+            padding: 4rem 2rem 2rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+            height: 100%;
+            box-sizing: border-box;
+            padding-top: 5rem; /* Add padding to prevent content from going under the back button */
+        }
+
+        .profile-content-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .profile-content-wrapper::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .profile-content-wrapper::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 1010; /* Increased z-index to appear above content */
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease, opacity 0.3s ease; /* Added opacity transition */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button i {
+            font-size: 1.2rem;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .back-button.hidden {
+            opacity: 0; /* Hide button */
+            pointer-events: none; /* Disable interactions */
+        }
+
+        /* Add support for browsers that don't support backdrop-filter */
+        @supports not (backdrop-filter: blur(5px)) {
+            .back-button {
+                background: rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-top: 1rem;
+        }
+
+        .profile-avatar {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .camera-icon {
+            position: absolute;
+            right: -5px;
+            bottom: -5px;
+            width: 28px;
+            height: 28px;
+            background: #007BFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            border: 2px solid white;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            z-index: 2;
+        }
+
+        .profile-avatar:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-avatar:hover .camera-icon {
+            transform: scale(1.1);
+            background: #0056b3;
+        }
+
+        .profile-info h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .profile-info p {
+            margin: 5px 0 0;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .profile-details {
+            margin-top: 2rem;
+        }
+
+        .profile-field {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .profile-field label {
+            display: block;
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-field p {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .close-profile {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .close-profile:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .profile-actions {
+            position: sticky;
+            bottom: 0;
+            background: inherit;
+            padding: 1rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .profile-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .edit-profile {
+            background: #007BFF;
+            color: white;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .profile-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .profile-avatar:hover::after {
+            display: none;
+        }
+
+        .profile-avatar input[type="file"] {
+            display: none;
+        }
+
+        .profile-avatar:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .avatar-overlay i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .edit-field {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .edit-field input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            width: 100%;
+            display: none;
+        }
+
+        .edit-field input:focus {
+            outline: none;
+            border-color: #007BFF;
+        }
+
+        .edit-field button {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-field button:hover {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .save-button {
+            display: none;
+            background: #28a745 !important;
+            color: white !important;
+        }
+
+        .save-button:hover {
+            background: #218838 !important;
+        }
+
+        .default-avatar {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e0e0e0;
+            border-radius: 50%;
+        }
+
+        .default-avatar i {
+            font-size: 40px;
+            color: #757575;
+        }
+
+        .profile-field .edit-field {
+            pointer-events: none; /* Disable editing by default */
+            opacity: 0.8;
+        }
+
+        .profile-field.editable .edit-field {
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        .edit-profile.editing {
+            background: #28a745; /* Green for save button */
+        }
+
+        .edit-profile.editing:hover {
+            background: #218838;
+        }
+
+        .profile-field.editable .edit-field p {
+            display: none;
+        }
+
+        .profile-field.editable .edit-field input {
+            display: block;
+        }
+
+        .error-message {
+            color: #ff3860;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .profile-field select {
+            width: 100%;
+            padding: 0.5rem;
+            background: rgba(244, 242, 242, 0.984);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: rgb(27, 24, 24);
+            border-radius: 4px;
+            font-size: 1rem;
+            display: none;
+        }
+
+        .profile-field.editable select {
+            display: block;
+        }
+
+        .rating-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .rating-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .close-rating {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .stars-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            font-size: 2rem;
+        }
+
+        .stars-container i {
+            cursor: pointer;
+            color: #FFD700;
+            transition: transform 0.2s ease;
+        }
+
+        .stars-container i:hover {
+            transform: scale(1.2);
+        }
+
+        #reviewComment {
+            width: 100%;
+            min-height: 100px;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin: 1rem 0;
+            resize: vertical;
+        }
+
+        .submit-rating {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .submit-rating:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/rating-popup.css">
+</head>
+<body>
+    <!-- Add this right after <body> tag -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Auth check overlay -->
+    <div id="authCheckOverlay" class="auth-check">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Main content (initially hidden) -->
+    <div id="mainContent">
+        <div class="image-gallery">
+            <!-- Image 1 -->
+            <div class="image-container">
+                <a href="events.html" class="image-link">
+                    <div class="image-wrapper">
+                        <div class="logo-overlay">
+                            <img src="images/rugbylogo.png" alt="Gandi-Hub Logo" draggable="false">
+                        </div>
+                        <div class="slideshow-container">
+                            <!-- Updated event images -->
+                            <img src="images/event1.jpg" alt="Rugby Events" class="gallery-image slide">
+                            <img src="images/event3.png" alt="Rugby Events" class="gallery-image slide">
+                            <img src="images/event2.jpg" alt="Rugby Events" class="gallery-image slide">
+                        </div>
+                        <div class="image-label">
+                            <i class="fas fa-calendar-alt calendar-icon"></i>
+                            Events
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Image 2 -->
+            <div class="image-container">
+                <a href="training.html" class="image-link">
+                    <div class="image-wrapper">
+                        <div class="slideshow-container">
+                            <!-- Updated training images -->
+                            <img src="images/rugby1.jpg" alt="Rugby Training" class="gallery-image slide">
+                            <img src="images/rugby10.jpg" alt="Rugby Training" class="gallery-image slide">
+                            <img src="images/training1.jpg" alt="Rugby Training" class="gallery-image slide">
+                        </div>
+                        <div class="image-label training-label">
+                            <div class="icon-group">
+                                <i class="fas fa-football-ball training-icon"></i>
+                                <i class="fas fa-dumbbell training-icon"></i>
+                            </div>
+                            Training
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Image 3 -->
+            <div class="image-container">
+                <a href="academics.html" class="image-link">
+                    <div class="image-wrapper">
+                        <div class="slideshow-container">
+                            <!-- Updated to use edu images -->
+                            <img src="images/edu1.jpg" alt="Rugby Academics" class="gallery-image slide">
+                            <img src="images/edu2.png" alt="Rugby Academics" class="gallery-image slide">
+                            <img src="images/rugby15.jpg" alt="Rugby Academics" class="gallery-image slide">
+                        </div>
+                        <div class="image-label academics-label">
+                            <div class="icon-stack">
+                                <i class="fas fa-book-open">
+                                    <i class="fas fa-pen"></i>
+                                    <div class="book-lines">
+                                        <div class="book-line"></div>
+                                        <div class="book-line"></div>
+                                        <div class="book-line"></div>
+                                    </div>
+                                </i>
+                            </div>
+                            Academics
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Image 4 -->
+            <div class="image-container">
+                <a href="/page4.html" class="image-link">
+                    <div class="image-wrapper">
+                        <div class="slideshow-container">
+                            <!-- Updated AI chat images -->
+                            <img src="images/rugbyai3.png" alt="Rugby AI Chat" class="gallery-image slide">
+                            <img src="images/rugbyai5.png" alt="Rugby AI Chat" class="gallery-image slide">
+                            <img src="images/rugbyai1.png" alt="Rugby AI Chat" class="gallery-image slide">
+                        </div>
+                        <div class="image-label ai-label">
+                            <i class="fas fa-robot robot-icon"></i>
+                            AI Chat
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Modern Footer Section -->
+        <footer class="modern-footer">
+            <div class="footer-container">
+                <div class="footer-grid">
+                    <div class="footer-column">
+                        <h3 class="footer-heading">Gandi-Hub Kenya</h3>
+                        <p>📍 Nairobi, Kenya<br>
+                        📞 +254 34 880 3177<br>
+                        </div>
+                        
+                        <div class="link-group">
+                            <h4 class="link-heading">Support</h4>
+                            <a href="help-center.html" class="footer-link">Help Center</a>
+                            <a href="faqs.html" class="footer-link">FAQs</a>
+                            <a href="contact.html" class="footer-link">Contact</a>
+                        </div>
+
+                        <div class="link-group">
+                            <h4 class="link-heading">Legal</h4>
+                            <a href="terms.html" class="footer-link">Terms</a>
+                            <a href="privacy.html" class="footer-link">Privacy</a>
+                            <a href="cookies.html" class="footer-link">Cookies</a>
+                        </div>
+                    </div>
+
+                    <div class="footer-column">
+                        <div class="newsletter-box">
+                            <h4 class="link-heading">Stay Updated</h4>
+                            <form class="newsletter-form">
+                                <input type="email" placeholder="Email address" class="newsletter-input">
+                                <button type="submit" class="newsletter-button">Join</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="legal-section">
+                    <p>© 2025 Gandi-Hub International · REA BO-523239<br>
+                    <a href="terms.html">Terms of Service</a> | 
+                    <a href="privacy.html">Privacy Policy</a> | 
+                    <a href="cookies.html">Cookie Settings</a><br>
+                    Protected by reCAPTCHA - Google Privacy & Terms</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="profile-icon" onclick="toggleProfile()">
+        <i class="fas fa-user-circle"></i>
+    </div>
+
+    <div class="profile-overlay" id="profileOverlay">
+        <button class="back-button" onclick="toggleProfile()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        
+        <div class="profile-content-wrapper">
+            <div class="profile-header">
+                <label class="profile-avatar" for="profileImage">
+                    <div class="avatar-content">
+                        <div class="default-avatar" id="defaultAvatarContainer">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <img id="avatarImage" src="" alt="Profile" 
+                            style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: none;">
+                        <div class="camera-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <input type="file" id="profileImage" accept="image/*" onchange="handleImageUpload(event)">
+                </label>
+                <div class="profile-info">
+                    <h2 id="profileName">Loading...</h2>
+                    <!-- Removed the email paragraph -->
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <div class="profile-field">
+                    <label>Full Name</label>
+                    <div class="edit-field">
+                        <p id="fullName">Loading...</p>
+                        <input type="text" id="fullNameInput" maxlength="50">
+                        <small class="error-message">Full name is required</small>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <label>Email</label>
+                    <p id="email">Loading...</p>
+                </div>
+                <div class="profile-field">
+                    <label>Membership Type</label>
+                    <p id="membershipType">Standard</p>
+                </div>
+                <div class="profile-field">
+                    <label>Join Date</label>
+                    <p id="joinDate">Loading...</p>
+                </div>
+                <div class="profile-field">
+                    <label>Username</label>
+                    <div class="edit-field">
+                        <p id="username">Loading...</p>
+                        <input type="text" id="usernameInput" maxlength="20">
+                        <small class="error-message">Username must be at least 3 characters</small>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <label>Phone Number</label>
+                    <div class="edit-field">
+                        <p id="phoneNumber">Not set</p>
+                        <input type="tel" id="phoneInput" pattern="[0-9+]+" maxlength="15" placeholder="+254700000000">
+                        <small class="error-message">Please enter a valid phone number</small>
+                    </div>
+                </div>
+
+                <div class="profile-field">
+                    <label>Location</label>
+                    <div class="edit-field">
+                        <p id="location">Not set</p>
+                        <input type="text" id="locationInput" maxlength="50" placeholder="City, Country">
+                        <small class="error-message">Location is required</small>
+                    </div>
+                </div>
+
+                <div class="profile-field">
+                    <label>Rugby Club</label>
+                    <div class="edit-field">
+                        <p id="club">Not set</p>
+                        <select id="clubInput">
+                            <option value="">Select a club</option>
+                            <optgroup label="Kenya Cup Teams">
+                                <option value="KCB">KCB Rugby Club</option>
+                                <option value="Kabras">Kabras Sugar RFC</option>
+                                <option value="Impala">Impala Saracens</option>
+                                <option value="Nakuru">Nakuru RFC</option>
+                                <option value="Quins">Kenya Harlequins</option>
+                                <option value="Mwamba">Mwamba RFC</option>
+                                <option value="Nondies">Nondescripts RFC</option>
+                                <option value="Homeboyz">Homeboyz RFC</option>
+                            </optgroup>
+                            <optgroup label="Championship Teams">
+                                <option value="Kisumu">Kisumu RFC</option>
+                                <option value="Bulls">Western Bulls</option>
+                                <option value="Monks">Catholic Monks</option>
+                                <option value="MMUST">MMUST RFC</option>
+                                <option value="USIU">USIU RFC</option>
+                                <option value="Strathmore">Strathmore Leos</option>
+                                <option value="Machine">Mean Machine</option>
+                                <option value="BlakBlad">Blak Blad RFC</option>
+                            </optgroup>
+                            <option value="Other">Other/None</option>
+                        </select>
+                        <small class="error-message">Please select a club</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <button class="profile-btn edit-profile" onclick="toggleEditMode(this)">Edit Profile</button>
+                <button class="profile-btn logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Rating Popup HTML -->
+    <div id="ratingPopup" class="rating-popup">
+        <div class="rating-content">
+            <button class="close-rating" onclick="closeRatingPopup()">×</button>
+            <h2>How's your experience with Gandi-Hub?</h2>
+            <div class="stars-container">
+                <i class="far fa-star" data-rating="1"></i>
+                <i class="far fa-star" data-rating="2"></i>
+                <i class="far fa-star" data-rating="3"></i>
+                <i class="far fa-star" data-rating="4"></i>
+                <i class="far fa-star" data-rating="5"></i>
+            </div>
+            <textarea id="reviewComment" placeholder="Share your thoughts about Gandi-Hub..."></textarea>
+            <button class="submit-rating" onclick="submitReview()">Submit Review</button>
+        </div>
+    </div>
+
+    <script>
+        // Image hover interaction
+        document.querySelectorAll('.image-container').forEach((container, index, containers) => {
+            container.addEventListener('mouseenter', () => {
+                if (index === 0 || index === containers.length - 1) return;
+                
+                container.style.transform = 'scaleX(1.05)';
+                container.style.zIndex = '2';
+
+                if (index > 0) containers[index - 1].style.transform = 'translateX(-5px)';
+                if (index < containers.length - 1) containers[index + 1].style.transform = 'translateX(5px)';
+            });
+
+            container.addEventListener('mouseleave', () => {
+                containers.forEach(c => {
+                    c.style.transform = 'none';
+                    c.style.zIndex = '1';
+                });
+            });
+        });
+    </script>
+    <!-- Add Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            initializeAuth,
+            browserLocalPersistence,
+            browserPopupRedirectResolver
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb7Rw9gf3k3OqUjpImv03oBJbDdAzsGpM",
+            authDomain: "gandi-hub-474d2.firebaseapp.com",
+            projectId: "gandi-hub-474d2",
+            storageBucket: "gandi-hub-474d2.firebasestorage.app",
+            messagingSenderId: "877278458127",
+            appId: "1:877278458127:web:22728337144c770a4b8e7a",
+            measurementId: "G-3CQ1HR1ZGZ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        
+        // Initialize Auth with required settings
+        const auth = initializeAuth(app, {
+            persistence: browserLocalPersistence,
+            popupRedirectResolver: browserPopupRedirectResolver
+        });
+
+        // Simplified auth check
+        if (sessionStorage.getItem('isAuthenticated')) {
+            // User is already authenticated, show content
+            document.getElementById('authCheckOverlay').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+        } else {
+            // No authenticated session, redirect to login
+            window.location.href = 'login.html';
+        }
+
+        // Logout function
+        window.logout = async function() {
+            try {
+                await auth.signOut();
+                sessionStorage.clear(); // Clear session data
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        }
+    </script>
+    <script>
+        // Add this at the end of your body, before other scripts
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hide loading overlay when page is ready
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.classList.add('loading-hidden');
+            setTimeout(() => loadingOverlay.style.display = 'none', 300);
+        });
+
+        // Add this to your window load event
+        window.addEventListener('load', () => {
+            // Hide loading overlay when all resources are loaded
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.classList.add('loading-hidden');
+            setTimeout(() => loadingOverlay.style.display = 'none', 300);
+        });
+
+        // Lazy load images that are not in the viewport
+        document.addEventListener('DOMContentLoaded', () => {
+            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            lazyImages.forEach(img => imageObserver.observe(img));
+        });
+
+        function initSlideshow() {
+            const sections = ['events', 'training', 'academics', 'ai'];
+            const slideshowContainers = document.querySelectorAll('.slideshow-container');
+            let currentSection = 0;
+            let currentSlides = Array.from(slideshowContainers).map(() => 0);
+
+            function updateSlides() {
+                // Get current container
+                const container = slideshowContainers[currentSection];
+                const slides = container.querySelectorAll('.slide');
+                
+                // Remove active class from current slide
+                slides[currentSlides[currentSection]].classList.remove('active');
+                
+                // Move to next slide for this section
+                currentSlides[currentSection] = (currentSlides[currentSection] + 1) % slides.length;
+                
+                // Add active class to new slide
+                slides[currentSlides[currentSection]].classList.add('active');
+                
+                // Move to next section
+                currentSection = (currentSection + 1) % sections.length;
+            }
+            
+            // Initialize first slide in each container
+            slideshowContainers.forEach((container, index) => {
+                const slides = container.querySelectorAll('.slide');
+                if (slides.length > 0) {
+                    slides[0].classList.add('active');
+                }
+            });
+            
+            // Change slide every 5 seconds
+            setInterval(updateSlides, 5000);
+        }
+
+        // Initialize slideshow when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initSlideshow);
+
+        function toggleProfile() {
+            const overlay = document.getElementById('profileOverlay');
+            
+            if (!overlay.classList.contains('active')) {
+                // Opening the profile
+                overlay.style.display = 'block';
+                // Force a reflow
+                overlay.offsetHeight;
+                overlay.classList.add('active');
+                loadUserProfile();
+            } else {
+                // Closing the profile
+                overlay.classList.remove('active');
+                // Wait for transition to complete before hiding
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        function loadUserProfile() {
+            // Get user data from session storage
+            const userEmail = sessionStorage.getItem('userEmail');
+            const userId = sessionStorage.getItem('userId');
+            const savedUsername = sessionStorage.getItem('username');
+            const savedFullName = sessionStorage.getItem('fullName');
+            const savedPhone = sessionStorage.getItem('phoneNumber');
+            const savedLocation = sessionStorage.getItem('location');
+            const savedClub = sessionStorage.getItem('club');
+            
+            // Update profile elements
+            document.getElementById('profileName').textContent = savedUsername || 'User ' + userId?.substring(0, 5);
+            // Removed email update
+            document.getElementById('fullName').textContent = savedFullName || userEmail?.split('@')[0] || 'N/A';
+            document.getElementById('email').textContent = userEmail;
+            document.getElementById('joinDate').textContent = new Date().toLocaleDateString();
+            document.getElementById('username').textContent = savedUsername || userEmail?.split('@')[0] || 'User';
+            document.getElementById('phoneNumber').textContent = savedPhone || 'Not set';
+            document.getElementById('location').textContent = savedLocation || 'Not set';
+            document.getElementById('club').textContent = savedClub || 'Not set';
+
+            // Load profile image if exists
+            const savedImage = sessionStorage.getItem('userProfileImage');
+            const avatarImage = document.getElementById('avatarImage');
+            const defaultAvatar = document.getElementById('defaultAvatarContainer');
+            
+            if (savedImage) {
+                avatarImage.src = savedImage;
+                avatarImage.style.display = 'block';
+                defaultAvatar.style.display = 'none';
+            } else {
+                avatarImage.style.display = 'none';
+                defaultAvatar.style.display = 'flex';
+            }
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check file size (limit to 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Image size should be less than 5MB');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatarImage = document.getElementById('avatarImage');
+                    const defaultAvatar = document.getElementById('defaultAvatarContainer');
+                    
+                    avatarImage.src = e.target.result;
+                    avatarImage.style.display = 'block';
+                    defaultAvatar.style.display = 'none';
+                    
+                    // Save to sessionStorage
+                    sessionStorage.setItem('userProfileImage', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Load saved profile image on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedImage = sessionStorage.getItem('userProfileImage');
+            const avatarImage = document.getElementById('avatarImage');
+            const defaultAvatar = document.getElementById('defaultAvatarContainer');
+            
+            if (savedImage) {
+                avatarImage.src = savedImage;
+                avatarImage.style.display = 'block';
+                defaultAvatar.style.display = 'none';
+            } else {
+                avatarImage.style.display = 'none';
+                defaultAvatar.style.display = 'flex';
+            }
+        });
+
+        function toggleUsernameEdit() {
+            if (!isEditing) return; // Don't allow editing if not in edit mode
+            
+            const usernameText = document.getElementById('username');
+            const usernameInput = document.getElementById('usernameInput');
+            const editBtn = document.getElementById('editUsernameBtn');
+            const saveBtn = document.getElementById('saveUsernameBtn');
+
+            // Show edit mode
+            usernameInput.value = usernameText.textContent;
+            usernameText.style.display = 'none';
+            usernameInput.style.display = 'block';
+            editBtn.style.display = 'none';
+            saveBtn.style.display = 'block';
+            usernameInput.focus();
+        }
+
+        function saveUsername() {
+            const usernameText = document.getElementById('username');
+            const usernameInput = document.getElementById('usernameInput');
+            const editBtn = document.getElementById('editUsernameBtn');
+            const saveBtn = document.getElementById('saveUsernameBtn');
+
+            // Validate username
+            const newUsername = usernameInput.value.trim();
+            if (newUsername.length < 3) {
+                alert('Username must be at least 3 characters long');
+                return;
+            }
+
+            // Update username
+            usernameText.textContent = newUsername;
+            
+            // Reset display
+            usernameText.style.display = 'block';
+            usernameInput.style.display = 'none';
+            editBtn.style.display = 'block';
+            saveBtn.style.display = 'none';
+        }
+
+        let isEditing = false;
+        let originalValues = {};
+
+        function toggleEditMode(button) {
+            const profileFields = document.querySelectorAll('.profile-field');
+            
+            if (!isEditing) {
+                // Store original values before editing
+                originalValues = {
+                    fullName: document.getElementById('fullName').textContent,
+                    username: document.getElementById('username').textContent
+                };
+
+                // Enable editing
+                profileFields.forEach(field => {
+                    field.classList.add('editable');
+                    const input = field.querySelector('input');
+                    const p = field.querySelector('p');
+                    if (input && p) {
+                        input.value = p.textContent;
+                    }
+                });
+                button.textContent = 'Save Changes';
+                button.classList.add('editing');
+                isEditing = true;
+            } else {
+                // Validate and save changes
+                if (validateAllFields()) {
+                    saveAllChanges();
+                    profileFields.forEach(field => field.classList.remove('editable'));
+                    button.textContent = 'Edit Profile';
+                    button.classList.remove('editing');
+                    isEditing = false;
+                }
+            }
+        }
+
+        function validateAllFields() {
+            let isValid = true;
+            
+            // Validate full name
+            const fullNameInput = document.getElementById('fullNameInput');
+            const fullNameError = fullNameInput.nextElementSibling;
+            if (!fullNameInput.value.trim()) {
+                fullNameError.style.display = 'block';
+                isValid = false;
+            } else {
+                fullNameError.style.display = 'none';
+            }
+
+            // Validate username
+            const usernameInput = document.getElementById('usernameInput');
+            const usernameError = usernameInput.nextElementSibling;
+            if (usernameInput.value.trim().length < 3) {
+                usernameError.style.display = 'block';
+                isValid = false;
+            } else {
+                usernameError.style.display = 'none';
+            }
+
+            // Validate phone number
+            const phoneInput = document.getElementById('phoneInput');
+            const phoneError = phoneInput.nextElementSibling;
+            const phonePattern = /^\+?\d{10,15}$/;
+            if (phoneInput.value.trim() && !phonePattern.test(phoneInput.value.trim())) {
+                phoneError.style.display = 'block';
+                isValid = false;
+            } else {
+                phoneError.style.display = 'none';
+            }
+
+            // Validate location
+            const locationInput = document.getElementById('locationInput');
+            const locationError = locationInput.nextElementSibling;
+            if (locationInput.value.trim() === '') {
+                locationError.style.display = 'block';
+                isValid = false;
+            } else {
+                locationError.style.display = 'none';
+            }
+
+            return isValid;
+        }
+
+        function saveAllChanges() {
+            // Get values from inputs
+            const newFullName = document.getElementById('fullNameInput').value.trim();
+            const newUsername = document.getElementById('usernameInput').value.trim();
+            const newPhone = document.getElementById('phoneInput').value.trim();
+            const newLocation = document.getElementById('locationInput').value.trim();
+            const newClub = document.getElementById('clubInput').value;
+
+            // Update display elements
+            document.getElementById('fullName').textContent = newFullName;
+            document.getElementById('username').textContent = newUsername;
+            document.getElementById('profileName').textContent = newUsername;
+            document.getElementById('phoneNumber').textContent = newPhone || 'Not set';
+            document.getElementById('location').textContent = newLocation || 'Not set';
+            document.getElementById('club').textContent = newClub || 'Not set';
+
+            // Save to session storage
+            sessionStorage.setItem('fullName', newFullName);
+            sessionStorage.setItem('username', newUsername);
+            sessionStorage.setItem('phoneNumber', newPhone);
+            sessionStorage.setItem('location', newLocation);
+            sessionStorage.setItem('club', newClub);
+
+            // Show success message
+            alert('Profile updated successfully!');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const backButton = document.querySelector('.back-button');
+            let lastScrollTop = 0;
+
+            document.querySelector('.profile-content-wrapper').addEventListener('scroll', function() {
+                const scrollTop = this.scrollTop;
+                if (scrollTop > lastScrollTop) {
+                    // Scrolling down
+                    backButton.classList.add('hidden');
+                } else {
+                    // Scrolling up
+                    backButton.classList.remove('hidden');
+                }
+                lastScrollTop = scrollTop;
+            });
+        });
+
+        // Show rating popup after 5 minutes
+        setTimeout(() => {
+            const ratingPopup = document.getElementById('ratingPopup');
+            ratingPopup.style.display = 'flex';
+        }, 5 * 60 * 1000); // 5 minutes in milliseconds
+
+        let selectedRating = 0;
+
+        // Star rating functionality
+        document.querySelectorAll('.stars-container i').forEach(star => {
+            star.addEventListener('mouseover', () => {
+                const rating = star.dataset.rating;
+                updateStars(rating);
+            });
+
+            star.addEventListener('click', () => {
+                selectedRating = star.dataset.rating;
+                updateStars(selectedRating);
+            });
+        });
+
+        document.querySelector('.stars-container').addEventListener('mouseleave', () => {
+            updateStars(selectedRating);
+        });
+
+        function updateStars(rating) {
+            document.querySelectorAll('.stars-container i').forEach(star => {
+                const starRating = star.dataset.rating;
+                star.className = starRating <= rating ? 'fas fa-star' : 'far fa-star';
+            });
+        }
+
+        function closeRatingPopup() {
+            document.getElementById('ratingPopup').style.display = 'none';
+        }
+
+        async function submitReview() {
+            if (!selectedRating) {
+                alert('Please select a rating');
+                return;
+            }
+
+            try {
+                const comment = document.getElementById('reviewComment').value;
+                const userData = {
+                    username: sessionStorage.getItem('username'),
+                    fullName: sessionStorage.getItem('fullName'),
+                    profileImage: sessionStorage.getItem('userProfileImage'),
+                    rating: selectedRating,
+                    comment: comment,
+                    date: new Date().toISOString(),
+                    userId: sessionStorage.getItem('userId')
+                };
+
+                // Add review to Firebase
+                const reviewRef = await addDoc(collection(db, "reviews"), userData);
+                
+                closeRatingPopup();
+                showNotification('Thank you for your review!', 'success');
+
+            } catch (error) {
+                console.error('Error submitting review:', error);
+                showNotification('Failed to submit review', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

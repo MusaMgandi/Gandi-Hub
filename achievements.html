@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements - Training Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/achievements.css">
+    <style>
+        /* ... existing styles ... */
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f2f5, #e0e5ec); /* Updated background */
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .achievements-container {
+            display: grid;
+            grid-template-columns: 280px 1fr; /* Increased sidebar width */
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .achievements-sidebar {
+            background: linear-gradient(145deg, #1a1a1a, #2c2c2c);
+            padding: 20px;
+            border-radius: 15px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-summary {
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .total-xp {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .level-indicator {
+            background: linear-gradient(90deg, #007BFF, #00E5FF);
+            padding: 10px;
+            border-radius: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .achievement-filters {
+            margin-top: 20px;
+        }
+
+        .filter-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left; /* Align text to the left */
+        }
+
+        .filter-button i {
+            margin-right: 10px; /* Add space for the icon */
+        }
+
+        .filter-button:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(5px);
+        }
+
+        .filter-button.active {
+            background: #007BFF;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Increased minmax width */
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .achievement-card {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border: 1px solid rgba(0,0,0,0.1);
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex; /* Use flexbox */
+            flex-direction: column; /* Stack content vertically */
+            justify-content: space-between; /* Distribute space evenly */
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .achievement-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #007BFF, #00E5FF);
+        }
+
+        .achievement-banner {
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            background: #FFD700;
+            color: black;
+            padding: 5px 30px;
+            transform: rotate(45deg);
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .achievement-progress {
+            position: relative;
+            margin-top: 15px;
+        }
+
+        .progress-percentage {
+            position: absolute;
+            right: 0;
+            top: -20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            animation: confetti-fall 3s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .achievement-modal .modal-content {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border: none;
+            padding: 40px;
+        }
+
+        .achievement-unlock-animation {
+            animation: unlock-pop 0.5s ease-out;
+        }
+
+        @keyframes unlock-pop {
+            0% { transform: scale(0) rotate(-180deg); }
+            60% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0); }
+        }
+
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 8px 15px;
+            background: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: #0056b3;
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>Your Achievements</h1>
+        <p>Track your progress and unlock new milestones!</p>
+    </header>
+
+    <a href="Gandi-Hub.html" class="back-button">← Back</a>
+
+    <div class="achievements-container">
+        <!-- Sidebar -->
+        <aside class="achievements-sidebar">
+            <div class="stats-summary">
+                <div class="total-xp">2,450 XP</div>
+                <p>Level 15</p>
+                <div class="level-indicator">
+                    <div class="progress" style="width: 75%"></div>
+                </div>
+                <p>Next Level: 550 XP remaining</p>
+            </div>
+            
+            <div class="achievement-filters">
+                <button class="filter-button active"><i class="fas fa-list"></i> All Achievements</button>
+                <button class="filter-button"><i class="fas fa-running"></i> Athletic</button>
+                <button class="filter-button"><i class="fas fa-book-reader"></i> Academic</button>
+                <button class="filter-button"><i class="fas fa-users"></i> Team Spirit</button>
+                <button class="filter-button"><i class="fas fa-check-circle"></i> Completed</button>
+            </div>
+        </aside>
+
+        <!-- Main Achievement Grid -->
+        <div class="achievements-grid">
+            <!-- Athletic Achievements -->
+            <div class="achievement-category">
+                <h2>Athletic Achievements</h2>
+                <div class="achievement-card" data-category="athletic">
+                    <div class="achievement-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <h3>Speed Demon</h3>
+                    <p>Complete 5 sprint training sessions</p>
+                    <div class="achievement-progress">
+                        <div class="progress-bar">
+                            <div class="fill" style="--progress-width: 80%"></div>
+                        </div>
+                        <span class="progress-percentage">80%</span>
+                    </div>
+                    <div class="reward-badge">+50 XP</div>
+                </div>
+
+                <div class="achievement-card" data-category="athletic">
+                    <div class="achievement-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <h3>Power Lifter</h3>
+                    <p>Reach personal best in weight training</p>
+                    <div class="achievement-progress">
+                        <div class="progress-bar">
+                            <div class="fill" style="width: 60%"></div>
+                        </div>
+                        <span class="progress-percentage">60%</span>
+                    </div>
+                    <div class="reward-badge">+100 XP</div>
+                </div>
+            </div>
+
+            <!-- Academic Achievements -->
+            <div class="achievement-category">
+                <h2>Academic Excellence</h2>
+                <div class="achievement-card" data-category="academic">
+                    <div class="achievement-icon">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <h3>Study Champion</h3>
+                    <p>Complete 20 study sessions</p>
+                    <div class="achievement-progress">
+                        <div class="progress-bar">
+                            <div class="fill" style="width: 45%"></div>
+                        </div>
+                        <span class="progress-percentage">45%</span>
+                    </div>
+                    <div class="reward-badge">+75 XP</div>
+                </div>
+            </div>
+
+            <!-- Team Achievements -->
+            <div class="achievement-category">
+                <h2>Team Spirit</h2>
+                <div class="achievement-card special" data-category="team spirit">
+                    <div class="achievement-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Team Player</h3>
+                    <p>Participate in 10 team practices</p>
+                    <div class="achievement-progress">
+                        <div class="progress-bar">
+                            <div class="fill" style="width: 90%"></div>
+                        </div>
+                        <span class="progress-percentage">90%</span>
+                    </div>
+                    <div class="reward-badge">+150 XP</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Unlock Modal -->
+    <div class="achievement-modal" id="achievementModal">
+        <div class="modal-content">
+            <i class="fas fa-trophy trophy-icon"></i>
+            <h2>Achievement Unlocked!</h2>
+            <p id="achievementName"></p>
+            <div class="xp-reward">+<span id="xpAmount">0</span> XP</div>
+            <button onclick="closeModal()">Awesome!</button>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced achievement unlock animation
+        function showAchievementModal(achievementName, xp) {
+            const modal = document.getElementById('achievementModal');
+            const content = modal.querySelector('.modal-content');
+            
+            document.getElementById('achievementName').textContent = achievementName;
+            document.getElementById('xpAmount').textContent = xp;
+            
+            modal.style.display = 'flex';
+            content.classList.add('achievement-unlock-animation');
+            
+            // Create more elaborate confetti
+            createEnhancedConfetti();
+            
+            // Play sound effect
+            playUnlockSound();
+        }
+
+        function closeModal() {
+            document.getElementById('achievementModal').style.display = 'none';
+        }
+
+        function createEnhancedConfetti() {
+            const colors = ['#FFD700', '#007BFF', '#00E5FF', '#FF6B6B'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        function playUnlockSound() {
+            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
+            audio.play().catch(e => console.log('Audio autoplay prevented'));
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.filter-button').forEach(btn => 
+                    btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Filter achievements (add your filtering logic here)
+                filterAchievements(button.textContent.toLowerCase());
+            });
+        });
+
+        function filterAchievements(category) {
+            const cards = document.querySelectorAll('.achievement-card');
+            cards.forEach(card => {
+                if (category === 'all achievements') {
+                    card.style.display = 'block';
+                    return;
+                }
+                
+                const cardCategory = card.dataset.category;
+                card.style.display = cardCategory === category ? 'block' : 'none';
+            });
+        }
+
+        // Example: Trigger achievement unlock
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulate achievement unlock after 2 seconds
+            setTimeout(() => {
+                showAchievementModal('Speed Demon', 50);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

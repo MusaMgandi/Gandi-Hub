@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Events - Gandi-Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007BFF;
+            --secondary-color: #0056b3;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .highlight-box {
+            background: rgba(0, 123, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .feature-list li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>About Events</h1>
+            <p>Discover how our events platform helps student-athletes stay connected and engaged</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <h2>What is Gandi-Hub Events?</h2>
+            <p>Gandi-Hub Events is your central hub for discovering, organizing, and participating in sports events and academic activities. Our platform brings together student-athletes, coaches, and institutions to create meaningful connections and opportunities.</p>
+            
+            <div class="highlight-box">
+                <h3>Why Choose Gandi-Hub Events?</h3>
+                <ul class="feature-list">
+                    <li>Real-time event updates and notifications</li>
+                    <li>Seamless registration and attendance tracking</li>
+                    <li>Interactive event calendar with filtering options</li>
+                    <li>Integration with academic schedules</li>
+                    <li>Event engagement analytics and insights</li>
+                </ul>
+            </div>
+            
+            <p>Whether you're looking for training sessions, competitions, or academic workshops, our events platform ensures you never miss an important opportunity to grow and excel.</p>
+            
+            <a href="events.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Events
+            </a>
+        </section>
+    </div>
+</body>
+</html>

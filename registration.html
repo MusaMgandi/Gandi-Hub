@@ -39,7 +39,7 @@
       box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
       position: relative;
       border: 1px solid rgba(0, 123, 255, 0.2);
-      transform: scale(0.95);  /* Slightly reduce size */
+      transform: scale(0.95);
       overflow: visible;
       max-height: none;
     }
@@ -57,7 +57,7 @@
       text-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
       letter-spacing: 1px;
       animation: twinkle 2s infinite;
-      position: relative;  /* Changed from sticky */
+      position: relative;
     }
 
     @keyframes twinkle {
@@ -67,7 +67,7 @@
     }
 
     .input-group {
-      margin-bottom: 15px;  /* Reduced margin */
+      margin-bottom: 15px;
       display: flex;
       flex-direction: column;
     }
@@ -76,7 +76,7 @@
       display: block;
       margin-bottom: 5px;
       font-weight: bold;
-      color: #333;  /* Changed from white to dark gray */
+      color: #333;
       font-size: 15px;
     }
 
@@ -86,14 +86,14 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 14px;
-      background-color: white;  /* Changed from dark to white */
-      color: #333;  /* Changed from white to dark gray */
+      background-color: white;
+      color: #333;
     }
 
     input:focus, select:focus {
       border-color: var(--primary-color);
       outline: none;
-      background-color: white;  /* Keep white background on focus */
+      background-color: white;
       box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
     }
 
@@ -132,12 +132,8 @@
     }
 
     @keyframes rotate {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     #registerButton {
@@ -147,15 +143,9 @@
     }
 
     @keyframes gradientMove {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .error-message {
@@ -168,7 +158,7 @@
       text-align: center;
       margin-top: 15px;
       font-size: 14px;
-      color: #333;  /* Changed from white to dark gray */
+      color: #333;
     }
 
     .account-text a {
@@ -239,7 +229,7 @@
 
     .location-group {
       display: flex;
-      gap: 10px;  /* Reduced gap */
+      gap: 10px;
       margin-bottom: 15px;
     }
 
@@ -254,34 +244,16 @@
     }
 
     form {
-      padding: 0;  /* Removed padding */
+      padding: 0;
       max-width: 100%;
       margin: 0 auto;
-    }
-
-    /* Update scrollbar for dark theme */
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #1a1a1a;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #007BFF;
-      border-radius: 5px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #0056b3;
     }
 
     .terms-container {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 15px;  /* Reduced margin */
+      margin-bottom: 15px;
     }
 
     .terms-container input[type="checkbox"] {
@@ -292,12 +264,32 @@
     .terms-container label {
       margin: 0;
       display: inline;
-      color: #333;  /* Changed from white to dark gray */
+      color: #333;
     }
 
-    /* Make calendar icon white */
     input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: none;  /* Remove invert filter */
+      filter: none;
+    }
+
+    select.form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      color: #333;
+      background-color: white;
+    }
+
+    select.form-control:focus {
+      border-color: #007BFF;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    }
+
+    optgroup {
+      font-weight: bold;
+      color: #666;
     }
   </style>
 </head>
@@ -327,7 +319,7 @@
       <div class="input-group">
         <label for="phone">Phone Number:</label>
         <div class="phone-input">
-          <select id="countryCode" name="countryCode" required>
+          <select id="countryCode" name="countryCode" required aria-label="Select Country Code">
             <option value="+1" selected>USA (+1)</option>
             <option value="+91">India (+91)</option>
             <option value="+44">UK (+44)</option>
@@ -406,6 +398,36 @@
         </select>
       </div>
 
+      <!-- Add this after the occupation field in the form -->
+      <div class="input-group">
+        <label for="club">Rugby Club</label>
+        <select id="club" name="club" class="form-control">
+            <option value="">Select your club (if any)</option>
+            <optgroup label="Kenya Cup Teams">
+                <option value="KCB">KCB Rugby Club</option>
+                <option value="Kabras">Kabras Sugar RFC</option>
+                <option value="Impala">Impala Saracens</option>
+                <option value="Nakuru">Nakuru RFC</option>
+                <option value="Quins">Kenya Harlequins</option>
+                <option value="Mwamba">Mwamba RFC</option>
+                <option value="Nondies">Nondescripts RFC</option>
+                <option value="Homeboyz">Homeboyz RFC</option>
+            </optgroup>
+            <optgroup label="Championship Teams">
+                <option value="Kisumu">Kisumu RFC</option>
+                <option value="Bulls">Western Bulls</option>
+                <option value="Monks">Catholic Monks</option>
+                <option value="MMUST">MMUST RFC</option>
+                <option value="USIU">USIU RFC</option>
+                <option value="Strathmore">Strathmore Leos</option>
+                <option value="Machine">Mean Machine</option>
+                <option value="BlakBlad">Blak Blad RFC</option>
+            </optgroup>
+            <option value="none">None/No Club</option>
+        </select>
+        <small class="error-message" id="clubError"></small>
+      </div>
+
       <!-- Terms and Conditions -->
       <div class="terms-container">
         <input type="checkbox" id="terms" name="terms" required>
@@ -426,7 +448,6 @@
   </div>
 
   <script>
-    const form = document.getElementById('registrationForm');
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirmPassword');
     const passwordStrength = document.getElementById('passwordStrength');
@@ -452,54 +473,7 @@
       passwordStrength.className = `password-strength ${strength}`;
     });
 
-    // Validate form on submit
-    form.addEventListener('submit', async function(event) {
-      event.preventDefault();
-
-      // Clear previous errors
-      document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-      document.querySelectorAll('input, select').forEach(el => el.classList.remove('error'));
-
-      // Get form values
-      const dob = new Date(document.getElementById('dob').value);
-      const password = passwordInput.value;
-      const confirmPassword = confirmPasswordInput.value;
-
-      // Calculate age
-      const today = new Date();
-      let age = today.getFullYear() - dob.getFullYear();
-      const monthDiff = today.getMonth() - dob.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-        age--;
-      }
-
-      // Validate age
-      if (age < 7) {
-        document.getElementById('ageError').textContent = 'You must be at least 7 years old.';
-        document.getElementById('dob').classList.add('error');
-        return;
-      }
-
-      // Validate passwords
-      if (password !== confirmPassword) {
-        document.getElementById('passwordError').textContent = 'Passwords do not match.';
-        confirmPasswordInput.classList.add('error');
-        return;
-      }
-
-      // Show loader
-      buttonText.style.display = 'none';
-      loader.style.display = 'block';
-
-      // Simulate form submission
-      setTimeout(() => {
-        alert('Registration successful!');
-        form.reset();
-        buttonText.style.display = 'inline';
-        loader.style.display = 'none';
-      }, 2000);
-    });
-
+    // Keep existing country data and functions
     const countryData = {
       kenya: {
         counties: [
@@ -771,5 +745,113 @@
       }
     }
   </script>
+  
+  <script type="module">
+    // Import the latest Firebase SDK versions
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDb7Rw9gf3k3OqUjpImv03oBJbDdAzsGpM",
+        authDomain: "gandi-hub-474d2.firebaseapp.com",
+        databaseURL: "https://gandi-hub-474d2-default-rtdb.firebaseio.com", // Add this line
+        projectId: "gandi-hub-474d2",
+        storageBucket: "gandi-hub-474d2.firebasestorage.app",
+        messagingSenderId: "877278458127",
+        appId: "1:877278458127:web:22728337144c770a4b8e7a",
+        measurementId: "G-3CQ1HR1ZGZ"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    // Get form element
+    const form = document.getElementById('registrationForm');
+
+    // Add form submit handler
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        // Show loader
+        const buttonText = document.getElementById('buttonText');
+        const loader = document.getElementById('loader');
+        buttonText.style.display = 'none';
+        loader.style.display = 'block';
+
+        try {
+            // Get form values
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            console.log('Creating user account...'); // Debug log
+
+            // Create user account
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            
+            console.log('User account created:', userCredential.user.uid); // Debug log
+
+            // Create user data object
+            const userData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: email,
+                dateOfBirth: document.getElementById('dob').value,
+                phone: document.getElementById('phone').value,
+                countryCode: document.getElementById('countryCode').value,
+                country: document.getElementById('country').value,
+                county: document.getElementById('county').value,
+                constituency: document.getElementById('constituency').value,
+                occupation: document.getElementById('occupation').value,
+                club: document.getElementById('club').value,
+                registrationDate: new Date().toISOString(),
+                lastUpdated: new Date().toISOString()
+            };
+
+            console.log('Saving user data...', userData); // Debug log
+
+            // Save user data to Realtime Database
+            await set(ref(db, 'users/' + userCredential.user.uid), userData);
+            
+            console.log('User data saved successfully'); // Debug log
+
+            // Show success message
+            alert('Registration successful! Please sign in to continue.');
+            
+            // Redirect to login page
+            window.location.href = 'login.html';
+
+        } catch (error) {
+            console.error('Registration error:', error); // Debug log
+            let errorMessage = 'Registration failed: ';
+            
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    errorMessage += 'This email is already registered.';
+                    break;
+                case 'auth/invalid-email':
+                    errorMessage += 'Invalid email address.';
+                    break;
+                case 'auth/operation-not-allowed':
+                    errorMessage += 'Email/password accounts are not enabled.';
+                    break;
+                case 'auth/weak-password':
+                    errorMessage += 'Password should be at least 6 characters.';
+                    break;
+                default:
+                    errorMessage += error.message;
+            }
+            
+            alert(errorMessage);
+            
+            // Reset loader
+            buttonText.style.display = 'inline';
+            loader.style.display = 'none';
+        }
+    });
+</script>
 </body>
 </html>
