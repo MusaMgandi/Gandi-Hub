@@ -565,7 +565,7 @@
             margin-top: 1rem;
             padding-top: 1rem;
             border-top: 1px solid var(--border-color);
-            color: var(--text-light);
+            color: var (--text-light);
             display: flex;
             align-items: flex-start;
             gap: 0.5rem;
@@ -692,7 +692,8 @@
 
         .notes-search input {
             width: 100%;
-            padding: 1rem 1rem 1rem 3rem;
+            padding: 1rem;
+            padding-right: 3rem;
             border: 2px solid #E5E7EB;
             border-radius: var(--border-radius);
             font-size: 1rem;
@@ -701,10 +702,11 @@
 
         .notes-search i {
             position: absolute;
-            left: 1rem;
+            right: 1rem;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-light);
+            pointer-events: none;
         }
 
         .notes-search input:focus {
@@ -727,7 +729,7 @@
             padding: 2rem;
             position: relative;
             overflow: hidden;
-            transition: var(--transition);
+            transition: var (--transition);
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
@@ -1049,6 +1051,117 @@
                 opacity: 1;
             }
         }
+
+        .activity-breakdown-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .activity-breakdown-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .activity-breakdown-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .activity-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .activity-stat-card {
+            background: linear-gradient(145deg, #f8f9fa, #ffffff);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.2);
+        }
+
+        .activity-stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+        }
+
+        .activity-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .activity-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .activity-sessions {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .activity-sessions i {
+            color: var(--primary-color);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .login-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--background-color);
+            z-index: 1000;
+        }
+
+        .login-container {
+            background: var(--surface-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .login-container h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
@@ -1086,25 +1199,126 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tippy.js@6/dist/tippy-bundle.umd.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Import Firebase SDKs
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
-        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { FirestoreService } from './firebase-service.js';
+        import { auth as firebaseAuth } from './firebase-config.js';
+        import { AuthService } from './auth-service.js';
 
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDb7Rw9gf3k3OqUjpImv03oBJbDdAzsGpM",
             authDomain: "gandi-hub-474d2.firebaseapp.com",
             projectId: "gandi-hub-474d2",
-            storageBucket: "gandi-hub-474d2.firebasestorage.app",
+            storageBucket: "gandi-hub-474d2.appspot.com",
             messagingSenderId: "877278458127",
-            appId: "1:877278458127:web:22728337144c770a4b8e7a",
-            measurementId: "G-3CQ1HR1ZGZ"
+            appId: "1:877278458127:web:22728337144c770a4b8e7a"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const db = getDatabase();
+        const db = getFirestore(app);
+        
+        // Remove this line as we're using the imported auth
+        // const auth = getAuth(app);
+
+        // Use firebaseAuth instead of auth in all functions
+        firebaseAuth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                showAuthenticatedUI();
+                loadSessions();
+            } else {
+                currentUser = null;
+                showLoginForm();
+            }
+        });
+
+        // Update all other auth references to use firebaseAuth
+        async function loadSessions() {
+            try {
+                const userId = firebaseAuth.currentUser.uid;
+                // ... rest of the function
+            } catch (error) {
+                console.error('Error loading sessions:', error);
+                showNotification('Failed to load sessions', 'error');
+            }
+        }
+
+        // Initialize authentication state
+        let currentUser = null;
+
+        // Add auth state observer
+        firebaseAuth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                showAuthenticatedUI();
+                loadSessions();
+            } else {
+                currentUser = null;
+                showLoginForm();
+            }
+        });
+
+        function showAuthenticatedUI() {
+            document.getElementById('loginSection')?.classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.querySelector('.sidebar').classList.remove('hidden');
+        }
+
+        function showLoginForm() {
+            // Create login form if it doesn't exist
+            if (!document.getElementById('loginSection')) {
+                const loginHTML = `
+                    <div id="loginSection" class="login-section">
+                        <div class="login-container">
+                            <h2>Login to Training Hub</h2>
+                            <form id="loginForm" onsubmit="handleLogin(event)">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" name="email" required class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" name="password" required class="form-input">
+                                </div>
+                                <button type="submit" class="button button-primary">Login</button>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('afterbegin', loginHTML);
+            }
+            
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+            document.querySelector('.sidebar').classList.add('hidden');
+        }
+
+        // Add login handler
+        async function handleLogin(event) {
+            event.preventDefault();
+            const form = event.target;
+            const email = form.email.value;
+            const password = form.password.value;
+
+            try {
+                await AuthService.login(email, password);
+                // Auth state observer will handle UI updates
+            } catch (error) {
+                showNotification('Login failed: ' + error.message, 'error');
+            }
+        }
+
+        // Add logout handler
+        async function handleLogout() {
+            try {
+                await AuthService.logout();
+                // Auth state observer will handle UI updates
+            } catch (error) {
+                showNotification('Logout failed: ' + error.message, 'error');
+            }
+        }
 
         // Load initial data
         async function loadData() {
@@ -1121,6 +1335,64 @@
 
         // Initialize data loading
         loadData();
+
+        async function saveSession(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            try {
+                const sessionData = {
+                    userId: firebaseAuth.currentUser.uid,
+                    type: formData.get('activityType'),
+                    date: formData.get('date'),
+                    time: formData.get('time'),
+                    duration: parseInt(formData.get('duration')),
+                    notes: formData.get('notes')
+                };
+
+                await FirestoreService.addTrainingSession(sessionData);
+                showNotification('Session saved successfully!', 'success');
+                closeSessionEditor();
+                loadSessions(); // Refresh the display
+            } catch (error) {
+                console.error('Error saving session:', error);
+                showNotification('Failed to save session', 'error');
+            }
+        }
+
+        async function loadSessions() {
+            try {
+                const userId = firebaseAuth.currentUser.uid;
+                const sessions = await FirestoreService.getTrainingSessions(userId);
+                updateScheduleDisplay(sessions);
+            } catch (error) {
+                console.error('Error loading sessions:', error);
+                showNotification('Failed to load sessions', 'error');
+            }
+        }
+
+        async function deleteSession(sessionId) {
+            if (confirm('Are you sure you want to delete this session?')) {
+                try {
+                    await FirestoreService.deleteTrainingSession(sessionId);
+                    showNotification('Session deleted successfully', 'success');
+                    loadSessions(); // Refresh the display
+                } catch (error) {
+                    console.error('Error deleting session:', error);
+                    showNotification('Failed to delete session', 'error');
+                }
+            }
+        }
+
+        firebaseAuth.onAuthStateChanged(user => {
+            if (user) {
+                loadSessions();
+            } else {
+                // Redirect to login or show login prompt
+                console.log('User not authenticated');
+            }
+        });
     </script>
 
     <script>
@@ -1365,34 +1637,37 @@
                     <div class="graph-container">
                         <canvas id="progressChart"></canvas>
                     </div>
-                    <div class="activity-breakdown">
-                        <h3>Activity Breakdown</h3>
-                        <div class="activity-grid">
-                            <div class="activity-card">
+                    <div class="activity-breakdown-container">
+                        <h3 class="activity-breakdown-title">Activity Breakdown</h3>
+                        <div class="activity-stats-grid">
+                            <div class="activity-stat-card">
                                 <div class="activity-icon">
                                     <i class="fas fa-running"></i>
                                 </div>
-                                <div class="activity-stats">
-                                    <h4>Cardio</h4>
-                                    <p>8 sessions this month</p>
+                                <div class="activity-name">Cardio</div>
+                                <div class="activity-sessions">
+                                    <i class="fas fa-calendar-check"></i>
+                                    <span>8 sessions this month</span>
                                 </div>
                             </div>
-                            <div class="activity-card">
+                            <div class="activity-stat-card">
                                 <div class="activity-icon">
                                     <i class="fas fa-dumbbell"></i>
                                 </div>
-                                <div class="activity-stats">
-                                    <h4>Strength</h4>
-                                    <p>12 sessions this month</p>
+                                <div class="activity-name">Strength</div>
+                                <div class="activity-sessions">
+                                    <i class="fas fa-calendar-check"></i>
+                                    <span>12 sessions this month</span>
                                 </div>
                             </div>
-                            <div class="activity-card">
+                            <div class="activity-stat-card">
                                 <div class="activity-icon">
                                     <i class="fas fa-yoga"></i>
                                 </div>
-                                <div class="activity-stats">
-                                    <h4>Flexibility</h4>
-                                    <p>6 sessions this month</p>
+                                <div class="activity-name">Flexibility</div>
+                                <div class="activity-sessions">
+                                    <i class="fas fa-calendar-check"></i>
+                                    <span>6 sessions this month</span>
                                 </div>
                             </div>
                         </div>
@@ -1402,16 +1677,16 @@
 
             notes: `
                 <div class="section-header">
-                    <h2><i class="fas fa-sticky-note"></i> Training Notes</h2>
-                    <button class="button button-primary" onclick="showNoteModal()">
-                        <i class="fas fa-plus"></i> Add Note
+                    <h2>Training Notes</h2>
+                    <button class="button button-primary" onclick="window.location.href='notes.html'">
+                        <i class="fas fa-file-pen"></i> Add Note
                     </button>
                 </div>
                 
                 <div class="notes-controls">
                     <div class="notes-search">
-                        <i class="fas fa-search"></i>
                         <input type="text" placeholder="Search notes..." onkeyup="searchNotes(this.value)">
+                        <i class="fas fa-magnifying-glass"></i>
                     </div>
                     <div class="notes-filter">
                         <select class="form-input" onchange="filterNotes(this.value)">
@@ -1786,7 +2061,7 @@
                     });
 
                     // Sort by date and time
-                    sessions.sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time));
+                    sessions.sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(a.date + ' ' + b.time));
 
                     scheduleList.innerHTML = sessions.map(session => `
                         <div class="schedule-item" data-id="${session.id}">
@@ -2521,7 +2796,7 @@
                     time: formData.get('time'),
                     duration: parseInt(formData.get('duration')),
                     notes: formData.get('notes'),
-                    userId: auth.currentUser.uid,
+                    userId: firebaseAuth.currentUser.uid,
                     timestamp: new Date().toISOString()
                 };
 
@@ -2547,7 +2822,7 @@
         // Update loading functions
         async function loadSessions() {
             try {
-                const userId = auth.currentUser.uid;
+                const userId = firebaseAuth.currentUser.uid;
                 const q = query(
                     collection(db, "sessions"), 
                     where("userId", "==", userId),
@@ -2571,7 +2846,7 @@
         // Initialize listeners
         document.addEventListener('DOMContentLoaded', () => {
             // Load sessions when authenticated
-            auth.onAuthStateChanged(user => {
+            firebaseAuth.onAuthStateChanged(user => {
                 if (user) {
                     loadSessions();
                 }
@@ -2663,7 +2938,7 @@
             getTrainingSessions, 
             updateAchievement 
         } from './firebase-data.js';
-        import { auth } from './firebase-config.js';
+        import { firebaseAuth } from './firebase-config.js';
 
         // Update existing saveSession function
         async function saveSession(event) {
@@ -2693,7 +2968,7 @@
         // Update existing loadSessions function
         async function loadSessions() {
             try {
-                const userId = auth.currentUser.uid;
+                const userId = firebaseAuth.currentUser.uid;
                 const sessions = await getTrainingSessions(userId);
                 displaySessions(sessions);
             } catch (error) {
@@ -2723,11 +2998,151 @@
         }
 
         // Initialize loading of data
-        auth.onAuthStateChanged(user => {
+        firebaseAuth.onAuthStateChanged(user => {
             if (user) {
                 loadSessions();
             }
         });
+    </script>
+
+    <script>
+    // Add this function to create the weekly progress graph
+    function createWeeklyGraph() {
+        const ctx = document.getElementById('weeklyChart').getContext('2d');
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        
+        // Sample data - replace with actual data from your database
+        const rugbyData = [2, 3, 1, 4, 2, 3, 2]; // Number of rugby sessions
+        const intensityData = [75, 85, 60, 90, 70, 80, 65]; // Intensity percentage
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: days,
+                datasets: [{
+                    label: 'Training Intensity (%)',
+                    data: intensityData,
+                    borderColor: '#007BFF',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    yAxisID: 'y'
+                }, {
+                    label: 'Rugby Sessions',
+                    data: rugbyData,
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Intensity (%)'
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Number of Sessions'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 5
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Weekly Training Progress'
+                    }
+                }
+            }
+        });
+    }
+
+    // Add this to your existing initialization code
+    document.addEventListener('DOMContentLoaded', () => {
+        // ...existing code...
+        createWeeklyGraph();
+    });
+</script>
+    <script type="module">
+        import { FirestoreService } from './firebase-service.js';
+
+        // Update the saveSession function
+        async function saveSession(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            try {
+                const sessionData = {
+                    userId: firebaseAuth.currentUser.uid,
+                    type: formData.get('activityType'),
+                    date: formData.get('date'),
+                    time: formData.get('time'),
+                    duration: parseInt(formData.get('duration')),
+                    notes: formData.get('notes')
+                };
+
+                await FirestoreService.addTrainingSession(sessionData);
+                showNotification('Session saved successfully!', 'success');
+                closeSessionEditor();
+                loadSessions(); // Refresh the display
+            } catch (error) {
+                console.error('Error saving session:', error);
+                showNotification('Failed to save session', 'error');
+            }
+        }
+
+        // Update the loadSessions function
+        async function loadSessions() {
+            try {
+                const userId = firebaseAuth.currentUser.uid;
+                const sessions = await FirestoreService.getTrainingSessions(userId);
+                updateScheduleDisplay(sessions);
+            } catch (error) {
+                console.error('Error loading sessions:', error);
+                showNotification('Failed to load sessions', 'error');
+            }
+        }
+
+        // Update the deleteSession function
+        async function deleteSession(sessionId) {
+            if (confirm('Are you sure you want to delete this session?')) {
+                try {
+                    await FirestoreService.deleteTrainingSession(sessionId);
+                    showNotification('Session deleted successfully', 'success');
+                    loadSessions(); // Refresh the display
+                } catch (error) {
+                    console.error('Error deleting session:', error);
+                    showNotification('Failed to delete session', 'error');
+                }
+            }
+        }
     </script>
 </body>
 </html>

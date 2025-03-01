@@ -7,31 +7,24 @@ import {
 // Training sessions
 export async function saveTrainingSession(sessionData) {
     try {
-        const userId = auth.currentUser.uid;
-        const data = {
-            ...sessionData,
-            userId,
-            createdAt: serverTimestamp()
-        };
-        const docRef = await addDoc(collection(db, "trainingSessions"), data);
+        const docRef = await addDoc(collection(db, "sessions"), sessionData);
         return docRef.id;
     } catch (error) {
-        console.error('Error saving training session:', error);
+        console.error("Error saving session:", error);
         throw error;
     }
 }
 
 export async function getTrainingSessions(userId) {
     try {
-        const q = query(
-            collection(db, "trainingSessions"),
-            where("userId", "==", userId),
-            orderBy("createdAt", "desc")
-        );
-        const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const q = query(collection(db, "sessions"), where("userId", "==", userId));
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
     } catch (error) {
-        console.error('Error getting training sessions:', error);
+        console.error("Error getting sessions:", error);
         throw error;
     }
 }
@@ -104,32 +97,10 @@ export async function getGrades(userId) {
 // Achievements tracking
 export async function updateAchievement(achievementData) {
     try {
-        const userId = auth.currentUser.uid;
-        const achievementRef = query(
-            collection(db, "achievements"),
-            where("userId", "==", userId),
-            where("achievementId", "==", achievementData.achievementId)
-        );
-        
-        const snapshot = await getDocs(achievementRef);
-        
-        if (snapshot.empty) {
-            return await addDoc(collection(db, "achievements"), {
-                ...achievementData,
-                userId,
-                createdAt: serverTimestamp(),
-                updatedAt: serverTimestamp()
-            });
-        }
-
-        const docRef = doc(db, "achievements", snapshot.docs[0].id);
-        await updateDoc(docRef, {
-            ...achievementData,
-            updatedAt: serverTimestamp()
-        });
-        return docRef.id;
+        const achievementRef = collection(db, "achievements");
+        await addDoc(achievementRef, achievementData);
     } catch (error) {
-        console.error('Error updating achievement:', error);
+        console.error("Error updating achievement:", error);
         throw error;
     }
 }

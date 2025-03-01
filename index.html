@@ -1,24 +1,1007 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Gandi-Hub</title>
-    <script>
-        // Redirect to appropriate page based on auth state
-        window.onload = function() {
-            const isAuthenticated = sessionStorage.getItem('isAuthenticated');
-            if (isAuthenticated) {
-                window.location.href = 'homepage.html';
-            } else {
-                window.location.href = 'login.html';
-            }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gandi-Hub - Rugby Sports Management</title>
+  <style>
+    /* General Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.6;
+      color: #000; /* Changed to black for better visibility */
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      justify-content: flex-start; /* Align items to the start */
+      padding-left: 20px; /* Add some padding on the left */
+    }
+
+    /* Header */
+    .header {
+      background-color: rgba(255, 255, 255, 0.65); /* More transparent initially */
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05); /* Lighter shadow */
+      position: fixed; /* Change from sticky to fixed */
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      padding: 0.3rem 0; /* Reduced from 0.5rem */
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother transition with custom easing */
+      margin: 0;
+    }
+
+    .header.scrolled {
+      padding: 0.3rem 0;
+      background-color: rgba(255, 255, 255, 0.95); /* More opaque when scrolled */
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+      transition: all 0.4s ease-in-out;
+    }
+
+    .header.scrolled .logo-image {
+      height: 55px; /* Reduced from 65px */
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .header.scrolled .nav a {
+      font-size: 0.95rem;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .header .logo-image,
+    .header .nav a,
+    .header .partner-bar__image {
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Add support for legacy browsers */
+    @supports not (backdrop-filter: blur(8px)) {
+      .header {
+        background-color: rgba(255, 255, 255, 0.85);
+      }
+      .header.scrolled {
+        background-color: rgba(255, 255, 255, 0.98);
+      }
+    }
+
+    .logo {
+      font-size: 2rem; /* Increased size */
+      font-weight: 700; /* Made bolder */
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Enhanced shadow for better readability */
+      color: #007BFF; /* Changed from green to blue */
+    }
+
+    .nav {
+        margin-left: 50px; /* Increased margin from 0 to 50px */
+        margin-right: auto;
+        padding-left: 20px; /* Added padding */
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #333; /* Darker color */
+      margin-right: 25px; /* Increased spacing between links */
+      font-size: 1.1rem; /* Slightly reduced */
+      font-weight: 700; /* Made bolder for better visibility */
+      transition: color 0.3s ease, transform 0.3s ease;
+      position: relative;
+      padding-bottom: 3px; /* Reduced from 5px */
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav a:hover {
+      color: #000; /* Changed from white to black */
+      transform: translateY(-2px);
+    }
+
+    .nav a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background-color: #007BFF;
+      transition: width 0.3s ease;
+    }
+
+    .nav a:hover::after {
+      width: 100%;
+      background-color: #000; /* Changed underline to black as well */
+    }
+
+    .cta-button {
+      background-color: #007BFF; /* Changed from green to blue */
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #0056b3; /* Changed from green to blue */
+      transform: translateY(-3px);
+    }
+
+    /* Partner Carousel */
+    .partner-bar {
+        position: static;
+        background: transparent;
+        padding: 0;
+        border: none;
+        width: auto; /* Adjust width to content */
+        height: auto;
+        margin-left: 20px; /* Add some margin */
+        overflow: visible;
+    }
+
+    .partner-bar__list {
+        display: flex;
+        flex-wrap: wrap; /* Allow logos to wrap */
+        animation: none;
+        gap: 20px;
+        align-items: center;
+        justify-content: flex-start; /* Align items to the start */
+    }
+
+    .partner-bar__item-wrapper {
+        flex: 0 0 auto;
+        padding: 0;
+        width: auto; /* Adjust width */
+    }
+
+    .partner-bar__item {
+      display: block;
+      text-align: center;
+      transition: transform 0.3s ease;
+      animation: pulsate 2s ease-in-out infinite;
+    }
+
+    @keyframes pulsate {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .partner-bar__item:hover {
+      transform: scale(1.1);
+      animation: none;
+    }
+
+    .partner-bar__image {
+        max-width: 80px; /* Adjust logo size */
+        height: 25px; /* Reduced from 30px */
+        object-fit: contain;
+        transition: all 0.3s ease;
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* Hero Section */
+    .hero {
+      background-image: url('images/rugbyai.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #fff;
+      text-align: center;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      min-height: 85vh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: none; /* Remove animation */
+    }
+
+    @keyframes slideshow {
+        0%, 15% {
+            background-image: url('images/rugbyai.png');
+            background-position: top center;
+            opacity: 1;
         }
-    </script>
+        18%, 31% {
+            background-image: url('images/rugbyai1.png');
+            background-position: top center;
+            opacity: 1;
+        }
+        34%, 47% {
+            background-image: url('images/rugbyai2.png');
+            background-position: center;
+            opacity: 1;
+        }
+        50%, 63% {
+            background-image: url('images/rugbyai3.png');
+            background-position: center;
+            opacity: 1;
+        }
+        66%, 79% {
+            background-image: url('images/rugbyai4.png');
+            background-position: center;
+            opacity: 1;
+        }
+        82%, 97% {
+            background-image: url('images/rugbyai5.png');
+            background-position: center 30%;
+            opacity: 1;
+        }
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: top center;
+        background-repeat: no-repeat;
+        opacity: 0;
+        z-index: -2;
+        animation: slideshow 60s cubic-bezier(0.4, 0, 0.2, 1) infinite; /* Increased to 60s from 50s */
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(38, 126, 198, 0.8) 0%,
+        rgba(38, 126, 198, 0.6) 100%
+      );
+      z-index: -1;
+      animation: gradientPulse 60s ease-in-out infinite; /* Match timing with slideshow */
+    }
+
+    @keyframes gradientPulse {
+        0%, 100% {
+            opacity: 0.7;
+        }
+        50% {
+            opacity: 0.9;
+        }
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 2;
+      padding-top: 90px; /* Reduced from 100px */
+      padding-bottom: 60px; /* Added padding bottom */
+      padding: 0;
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+      animation: fadeInDown 1s ease-out;
+      font-size: 3rem; /* Increased size */
+      margin-bottom: 1.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 1s ease-out;
+      font-size: 1.4rem; /* Increased size */
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      line-height: 1.4;
+    }
+
+    .hero .cta-button {
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 1.5s ease-out;
+      overflow: hidden; /* Add this line */
+      font-size: 1.2rem;
+      padding: 1rem 2rem;
+      min-width: 200px;
+    }
+
+    .hero .cta-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent); /* Increased opacity */
+        animation: shine-hero 5s linear infinite alternate; /* Adjusted animation */
+        z-index: 1;
+    }
+
+    @keyframes shine-hero {
+        0% {
+            transform: translateX(-50%);
+        }
+        100% {
+            transform: translateX(50%);
+        }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* About Section */
+    .about {
+      padding: 4rem 0;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(249, 249, 249, 0.95), rgba(224, 224, 224, 0.95));
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
+      z-index: 1;
+    }
+
+    .about::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        height: 200%;
+        width: 200%;
+        background: repeating-linear-gradient(
+            45deg,
+            rgba(0, 123, 255, 0.03) 0px,
+            rgba(0, 123, 255, 0.03) 20px,
+            transparent 20px,
+            transparent 40px
+        );
+        animation: moveStripes 20s linear infinite;
+        z-index: -1;
+    }
+
+    @keyframes moveStripes {
+        0% {
+            transform: translate(-25%, -25%);
+        }
+        100% {
+            transform: translate(0%, 0%);
+        }
+    }
+
+    .about .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .about h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #007BFF; /* Changed from green to blue */
+    }
+
+    .about p {
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      color: #000; /* Changed to black for better visibility */
+    }
+
+    /* Features Section */
+    .features {
+      padding: 4rem 0;
+      background-color: #fff;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: #007BFF; /* Changed from green to blue */
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .feature-card {
+      background-color: #f4f4f4;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(to right, #f4f4f4, #fafafa);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 25px rgba(0, 123, 255, 0.2);
+      background: linear-gradient(to right, #f4f4f4, #f8fbff);
+    }
+
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(0, 123, 255, 0.1), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .feature-card:hover::after {
+      opacity: 1;
+    }
+
+    .feature-card h3, .feature-card p {
+      position: relative;
+      z-index: 2;
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: #007BFF; /* Changed from green to blue */
+    }
+
+    .feature-card p {
+      color: #000; /* Changed to black for better visibility */
+    }
+
+    /* Reviews Section */
+    .reviews {
+      padding: 4rem 0;
+      background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
+    }
+
+    .reviews h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: #007BFF; /* Changed from green to blue */
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .testimonial-card {
+      background-color: #fff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .author {
+      display: flex;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .author img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 1rem;
+    }
+
+    .author span {
+      font-size: 0.9rem;
+      color: #000; /* Changed to black for better visibility */
+    }
+
+    /* AI-Powered Assistant Section */
+    .ai-assistant {
+      padding: 4rem 0;
+      text-align: center;
+      background: linear-gradient(135deg, #007BFF, #0056b3); /* Changed from green to blue */
+      color: #fff;
+    }
+
+    .ai-assistant h2 {
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    .ai-assistant p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .ai-assistant .cta-button {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-assistant .cta-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent); /* Increased opacity */
+        animation: shine-hero 5s linear infinite alternate;
+        z-index: 1;
+    }
+
+    @keyframes shine-ai {
+        0% {
+            transform: translateX(-50%);
+        }
+        100% {
+            transform: translateX(50%);
+        }
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 1.5rem 0;
+      background-color: #007BFF; /* Changed from green to blue */
+      color: #fff;
+    }
+
+    .footer a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 0.5rem;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: -10px; /* Reduced gap */
+        position: relative;
+        overflow: hidden; /* Contain the shine effect */
+        margin-left: -20px; /* Move further to the left */
+    }
+
+    .logo-image {
+        
+        height: 75px; /* Reduced from 95px */
+        object-fit: contain;
+        position: relative;
+        transition: transform 0.3s ease; /* Add transition */
+    }
+
+    .logo-image:hover {
+        transform: translateY(-5px) scale(1.1); /* Move up and scale on hover */
+    }
+
+    .nav-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between; /* Keep space between */
+        margin-left: 0; /* Remove margin */
+    }
+
+    .auth-buttons {
+        margin-left: auto; /* Push buttons to the right */
+    }
+
+    .auth-buttons .cta-button {
+        position: relative;
+        overflow: hidden;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+    }
+
+    .auth-buttons .cta-button:hover::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 200%; /* Wider shine */
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        animation: shine-cool 2.5s linear infinite; /* Adjusted animation */
+        z-index: 1;
+    }
+
+    @keyframes shine-cool {
+        0% {
+            transform: translateX(-50%);
+        }
+        100% {
+            transform: translateX(50%);
+        }
+    }
+
+    /* Add styles for testimonial images */
+    .testimonial-card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+    }
+
+    .testimonial-card img:hover {
+        transform: scale(1.4); /* Reduced from 1.8 */
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        z-index: 10;
+    }
+
+    .custom-alert {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(145deg, #ffffff, #f0f0f0);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        z-index: 1000;
+        text-align: center;
+        min-width: 300px;
+        border: 1px solid rgba(0, 123, 255, 0.2);
+    }
+
+    .custom-alert img {
+        width: 100px;
+        margin-bottom: 15px;
+        animation: rotateAndPulse 3s infinite ease-in-out;
+    }
+
+    @keyframes rotateAndPulse {
+        0% {
+            transform: rotate(0deg) scale(1);
+        }
+        50% {
+            transform: rotate(180deg) scale(1.1);
+        }
+        100% {
+            transform: rotate(360deg) scale(1);
+        }
+    }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+    }
+
+    .custom-alert button {
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #007BFF, #0056b3);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .custom-alert button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        background: linear-gradient(135deg, #0056b3, #007BFF);
+    }
+
+    .custom-alert button:active {
+        transform: translateY(1px);
+    }
+
+    .custom-alert button::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: rgba(255, 255, 255, 0.1);
+        transform-origin: 0 0;
+        animation: rotate 2s linear infinite;
+        pointer-events: none;
+    }
+
+    .custom-alert .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .custom-alert button.return-btn {
+        background: linear-gradient(135deg, #007BFF, #0056b3); /* Changed to blue gradient */
+        padding: 12px 25px;
+    }
+
+    .custom-alert button.return-btn:hover {
+        background: linear-gradient(135deg, #0056b3, #007BFF); /* Reversed blue gradient on hover */
+    }
+
+    /* Update header container for better spacing */
+    .header-container {
+        padding: 0 20px; /* Add horizontal padding */
+    }
+  </style>
 </head>
 <body>
-    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-        <img src="images/rugbylogo.png" alt="Loading..." style="width: 100px; height: 100px;">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+        <!-- Logo Container -->
+        <div class="logo-container">
+            <img src="images/rugbylogo.png" alt="Rugby Logo" class="logo-image" onclick="window.location.href='login.html'" style="cursor: pointer;">
+            <div class="logo">Gandi-Hub</div>
+        </div>
+
+        <!-- Navigation Container -->
+        <nav class="nav" style="display: flex; justify-content: flex-start; margin-left: 50px; padding-left: 20px;">
+            <a href="#about">About</a>
+            <a href="#features">Features</a>
+            <a href="#reviews">Reviews</a>
+            <a href="creator.html">Creator</a>
+        </nav>
+
+        <!-- Partner Logos and Sign Up/Sign In Buttons Container -->
+        <div class="partner-bar" style="display: flex; align-items: center;">
+            <div class="partner-bar__list">
+                <div class="partner-bar__item-wrapper">
+                    <a class="partner-bar__item" href="https://www.macron.com/uk/" target="_blank" rel="noopener">
+                        <img class="partner-bar__image" src="https://resources.worldrugby-rims.pulselive.com/photo-resources/2024/09/09/e3f87ff2-f64d-4b49-9e37-d12f6c791580/Macron-Logo.png?width=128" alt="Macron Logo">
+                    </a>
+                </div>
+                <div class="partner-bar__item-wrapper">
+                    <a class="partner-bar__item" href="https://www.emirates.com/uk/english/" target="_blank" rel="noopener">
+                        <img class="partner-bar__image" src="https://resources.worldrugby-rims.pulselive.com/photo-resources/2024/09/09/7889fe63-77a1-4f08-b877-52b4d2dabca7/WR_Emirates.png?width=128" alt="WR_Emirates">
+                    </a>
+                </div>
+                <div class="partner-bar__item-wrapper">
+                    <a class="partner-bar__item" href="https://www.hsbc.com/" target="_blank" rel="noopener">
+                        <img class="partner-bar__image" src="https://resources.worldrugby-rims.pulselive.com/photo-resources/2024/09/09/07b78b2c-11d9-4387-b629-7b87ffd8aafa/HSBC-Logo.png?width=128" alt="HSBC Logo">
+                    </a>
+                </div>
+                <div class="partner-bar__item-wrapper">
+                    <a class="partner-bar__item" href="https://wiz-team.com/" target="_blank" rel="noopener">
+                        <img class="partner-bar__image" src="https://resources.worldrugby-rims.pulselive.com/photo-resources/2024/11/20/801672b6-33c4-4873-99a6-07947d945d99/WizTeam-WR.png?width=128" alt="WizTeam-WR">
+                    </a>
+                </div>
+            </div>
+            <!-- Sign Up/Sign In Buttons Container -->
+            <div class="auth-buttons" style="margin-left: 20px;">
+                <button class="cta-button signup-button" onclick="window.location.href='registration.html'">Sign Up</button>
+                <button class="cta-button signin-button" onclick="window.location.href='login.html'">Sign In</button>
+            </div>
+        </div>
     </div>
+</header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+        <h1>Empowering Rugby Athletes to Excel in Sports and Academics</h1>
+        <p>With cutting-edge tools and AI integration, plan to stay ahead of your game.</p>
+        <button class="cta-button" onclick="tryAIChatbot()">Try Our AI Chatbot</button>
+    </div>
+</section>
+
+  <!-- About Section -->
+  <section id="about" class="about">
+    <div class="container">
+      <h2>About Gandi-Hub</h2>
+      <p>Gandi-Hub is a revolutionary sports management platform designed to help rugby athletes achieve peak performance both on the field and in the classroom. With cutting-edge tools and AI integration, we provide personalized plans, progress tracking, and reminders to keep athletes ahead of their schedules.</p>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2>Our Main Targets</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Enhance Athletic Performance</h3>
+          <p>Through personalized training plans tailored to each athlete's needs.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Support Academic Success</h3>
+          <p>With time management tools to balance studies and sports commitments.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Provide AI-Driven Insights</h3>
+          <p>To optimize schedules, track progress, and foster a balanced lifestyle.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section id="reviews" class="reviews">
+    <div class="container">
+      <h2>What People Say About Gandi-Hub</h2>
+      <div style="display: flex; justify-content: space-around; align-items: center;">
+        <div class="testimonial-card" style="text-align: center;">
+          <img src="images/rugby2.jpg" alt="Musa Mgandi" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 10px;">
+          <p>"Gandi-Hub has transformed the way I manage my rugby and academic life. The AI chatbot is a game-changer!"</p>
+          <span>Musa Mgandi, Rugby Player</span>
+        </div>
+        <div class="testimonial-card" style="text-align: center;">
+          <img src="images/rugby1.jpg" alt="Jane Smith" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 10px;">
+          <p>"The progress tracking feature keeps me motivated and on top of my goals. Highly recommend it!"</p>
+          <span>Vincent Onyala, Student Athlete</p>
+        </div>
+        <div class="testimonial-card" style="text-align: center;">
+          <img src="images/rugby01.jpg" alt="Mike Johnson" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 10px;">
+          <p>"The reminders and notes feature is a lifesaver. I never miss a training session or assignment deadline."</p>
+          <span>Mike Johnson, Coach</span>
+        </div>
+      </div>
+      <div style="text-align: right; margin-top: 10px;">
+        <a href="reviews.html" style="color: #007BFF; text-decoration: none;">See More Reviews</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI-Powered Assistant Section -->
+  <section id="ai-assistant" class="ai-assistant">
+    <div class="container">
+      <h2>AI-Powered Assistant</h2>
+      <p>Our AI chatbot helps athletes plan their schedules, set reminders, take notes, and track progress seamlessly. Stay ahead of your game with Gandi-Hub's intelligent assistant.</p>
+      <button class="cta-button" onclick="tryAIChatbot()">Try Our AI Chatbot</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Gandi-Hub. All rights reserved. | <a href="#">Privacy Policy</a></p>
+    </div>
+</footer>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="custom-alert" id="customAlert">
+      <img src="images/rugbylogo.png" alt="Rugby Logo">
+      <p>Please sign in to use the AI Chatbot</p>
+      <div class="buttons">
+          <button class="return-btn" onclick="closeAlert()">Close</button>
+          <button onclick="proceedToLogin()">Sign In</button>
+      </div>
+  </div>
+
+  <script>
+    // Updated Smooth Scroll for Navigation Links
+    document.querySelectorAll('.nav a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            // Only prevent default for hash links (internal navigation)
+            if (this.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+            // External links will work normally
+        });
+    });
+
+    // Function to handle chatbot button clicks
+    function tryAIChatbot() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('customAlert').style.display = 'block';
+    }
+
+    function proceedToLogin() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('customAlert').style.display = 'none';
+        window.location.href = 'login.html';
+    }
+
+    function closeAlert() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('customAlert').style.display = 'none';
+    }
+
+    // Improved scroll handler with variable for last scroll position
+    let lastScroll = 0;
+    let scrollTimeout;
+    
+    window.addEventListener('scroll', function() {
+        if (!scrollTimeout) {
+            scrollTimeout = setTimeout(function() {
+                const header = document.querySelector('.header');
+                const currentScroll = window.scrollY;
+                
+                if (currentScroll > 10) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+                
+                lastScroll = currentScroll;
+                scrollTimeout = null;
+            }, 5); // Reduced timeout for more responsive feel
+        }
+    });
+  </script>
 </body>
 </html>

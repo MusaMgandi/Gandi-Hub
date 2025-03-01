@@ -296,11 +296,51 @@
     #loader {
       display: none;
     }
+
+    .back-link {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      color: #007BFF;
+      text-decoration: none;
+      font-size: 1.1rem;  /* Increased from 0.9rem */
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;  /* Increased from 4px */
+      transition: all 0.3s ease;
+      z-index: 1000;
+      font-weight: 600;  /* Added bold weight */
+      padding: 8px 12px;  /* Added padding */
+      border-radius: 4px;  /* Added rounded corners */
+      background: rgba(255, 255, 255, 0.9);  /* Added semi-transparent background */
+      box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);  /* Added subtle shadow */
+    }
+
+    .back-link i {
+      font-size: 1.2rem;  /* Increased arrow size */
+      transition: transform 0.3s ease;  /* Added transition for arrow */
+    }
+
+    .back-link:hover {
+      color: #0056b3;
+      transform: translateX(-5px);  /* Increased movement */
+      background: rgba(255, 255, 255, 1);  /* Fully opaque on hover */
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);  /* Enhanced shadow on hover */
+    }
+
+    .back-link:hover i {
+      transform: translateX(-3px);  /* Added arrow movement on hover */
+    }
   </style>
   <!-- Add Font Awesome for social icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+  <!-- Replace button with anchor tag -->
+  <a href="index.html" class="back-link">
+    <i class="fas fa-arrow-left"></i> Back to Home
+  </a>
+
   <div class="container">
     <h2>Sign in</h2>
     <form id="loginForm">

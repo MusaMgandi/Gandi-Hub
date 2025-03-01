@@ -3,146 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes - Training Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Add Training Notes - Gandi-Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* ... existing styles from training.html ... */
-        .notes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+        :root {
+            --primary-color: #4F46E5;
+            --primary-light: #818CF8;
+            --secondary-color: #3730A3;
+            --background-color: #F9FAFB;
+            --surface-color: #FFFFFF;
+            --text-color: #1F2937;
+            --text-light: #6B7280;
+            --success-color: #10B981;
+            --error-color: #EF4444;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-color);
+            margin: 0;
             padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+
+        .notes-form {
+            background: var(--surface-color);
+            padding: 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .button {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .notes-list {
+            margin-top: 30px;
         }
 
         .note-card {
-            background: white;
+            background: var(--surface-color);
             padding: 20px;
             border-radius: var(--border-radius);
+            margin-bottom: 15px;
             box-shadow: var(--box-shadow);
-            position: relative;
+            transition: var(--transition);
         }
 
-        .note-card .date {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
+        .note-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .note-actions {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .note-actions button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #666;
-            transition: color 0.3s ease;
-        }
-
-        .note-actions button:hover {
-            color: var(--primary-color);
-        }
-
-        .notes-header {
+        .note-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem;
-            background-color: #f0f8ff;
-            border-bottom: 2px solid #ddd;
+            margin-bottom: 10px;
         }
 
-        .notes-header h2 {
-            font-size: 1.5rem;
-            color: #007BFF;
+        .note-date {
+            color: var(--text-light);
+            font-size: 0.9rem;
         }
 
-        .notes-controls button {
-            background: #007BFF;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .notes-controls button:hover {
-            background: #0056b3;
-        }
-
-        .note-list {
-            padding: 1rem;
-        }
-
-        .note {
-            background: white;
-            border: 1px solid #ddd;
-            padding: 0.75rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
-
-        .note h3 {
-            font-size: 1.1rem;
-            color: #007BFF;
-        }
-
-        .note p {
-            font-size: 1rem;
+        .note-content {
+            color: var(--text-color);
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Similar sidebar as schedule.html -->
-        <main class="main-content">
-            <header class="header">
-                <div class="notes-header">
-                    <h2>Training Notes</h2>
-                    <div class="notes-controls">
-                        <button><i class="fas fa-plus"></i> Add Note</button>
-                    </div>
+        <a href="training.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Training
+        </a>
+        
+        <div class="notes-form">
+            <h2>Add Training Note</h2>
+            <form id="noteForm" onsubmit="saveNote(event)">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-input" name="title" required title="Enter note title" placeholder="Enter note title">
                 </div>
-            </header>
-
-            <div class="note-list">
-                <div class="note">
-                    <h3>Strength Training</h3>
-                    <p>Completed heavy lifting session. Focus on form next time.</p>
+                
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-input" name="category" required title="Select note category">
+                        <option value="training">Training Session</option>
+                        <option value="technique">Technique</option>
+                        <option value="progress">Progress</option>
+                        <option value="goals">Goals</option>
+                    </select>
                 </div>
-
-                <div class="note">
-                    <h3>Cardio</h3>
-                    <p>Improved endurance by 10% on treadmill.</p>
+                
+                <div class="form-group">
+                    <label class="form-label">Note Content</label>
+                    <textarea class="form-textarea" name="content" required title="Enter note content" placeholder="Enter your training notes here..."></textarea>
                 </div>
-            </div>
+                
+                <button type="submit" class="button">Save Note</button>
+            </form>
+        </div>
 
-            <div class="notes-grid">
-                <!-- Notes will be populated by JavaScript -->
-            </div>
-        </main>
+        <div class="notes-list" id="notesList">
+            <!-- Notes will be displayed here -->
+        </div>
     </div>
 
     <script>
-        // Load and display notes
-        function loadNotes() {
-            const notes = JSON.parse(localStorage.getItem('trainingNotes') || '[]');
-            const notesGrid = document.querySelector('.notes-grid');
+        function saveNote(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
             
-            notes.forEach(note => {
-                const noteElement = createNoteElement(note);
-                notesGrid.appendChild(noteElement);
-            });
+            const note = {
+                title: formData.get('title'),
+                category: formData.get('category'),
+                content: formData.get('content'),
+                date: new Date().toISOString(),
+            };
+
+            // Get existing notes from localStorage
+            let notes = JSON.parse(localStorage.getItem('trainingNotes') || '[]');
+            notes.unshift(note); // Add new note at the beginning
+            
+            // Save back to localStorage
+            localStorage.setItem('trainingNotes', JSON.stringify(notes));
+            
+            // Reset form and display notes
+            form.reset();
+            displayNotes();
         }
 
-        document.addEventListener('DOMContentLoaded', loadNotes);
+        function displayNotes() {
+            const notesList = document.getElementById('notesList');
+            const notes = JSON.parse(localStorage.getItem('trainingNotes') || '[]');
+            
+            notesList.innerHTML = notes.map(note => `
+                <div class="note-card">
+                    <div class="note-header">
+                        <h3>${note.title}</h3>
+                        <span class="note-date">${new Date(note.date).toLocaleDateString()}</span>
+                    </div>
+                    <div class="note-content">
+                        <p>${note.content}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Display notes when page loads
+        document.addEventListener('DOMContentLoaded', displayNotes);
     </script>
 </body>
 </html>
