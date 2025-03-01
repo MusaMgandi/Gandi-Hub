@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Training Hub - Gandi-Hub</title>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tippy.js@6/dist/tippy.css">
@@ -108,7 +110,7 @@
             padding: 24px;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
-            transition: var(--transition);
+            transition: var (--transition);
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
@@ -595,7 +597,7 @@
             border-radius: var(--border-radius);
             padding: 1.5rem;
             box-shadow: var(--box-shadow);
-            transition: var(--transition);
+            transition: var (--transition);
             border-left: 4px solid var(--primary-color);
             position: relative;
         }
@@ -791,7 +793,7 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+            background: linear-gradient(to right, var(--primary-color), var (--primary-light));
             border-radius: 4px;
             transition: width 0.5s ease;
         }
@@ -1207,19 +1209,13 @@
         import { auth as firebaseAuth } from './firebase-config.js';
         import { AuthService } from './auth-service.js';
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDb7Rw9gf3k3OqUjpImv03oBJbDdAzsGpM",
-            authDomain: "gandi-hub-474d2.firebaseapp.com",
-            projectId: "gandi-hub-474d2",
-            storageBucket: "gandi-hub-474d2.appspot.com",
-            messagingSenderId: "877278458127",
-            appId: "1:877278458127:web:22728337144c770a4b8e7a"
-        };
+        import { firebaseConfig } from './firebase-config.js';
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        // Use the existing Firebase app instance
+        const existingApp = getApp();
+        // Remove duplicate db declaration as it should be imported from firebase-config.js
+        // const db = getFirestore(app);
         
-        // Remove this line as we're using the imported auth
         // const auth = getAuth(app);
 
         // Use firebaseAuth instead of auth in all functions
@@ -2778,7 +2774,7 @@
 
     <!-- Add this after your existing scripts -->
     <script type="module">
-        import { db, storage } from './firebase-config.js';
+        import { storage } from './firebase-config.js';
         import { collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
@@ -3135,7 +3131,7 @@
             if (confirm('Are you sure you want to delete this session?')) {
                 try {
                     await FirestoreService.deleteTrainingSession(sessionId);
-                    showNotification('Session deleted successfully', 'success');
+                    showNotification('Session deleted successfully!', 'success');
                     loadSessions(); // Refresh the display
                 } catch (error) {
                     console.error('Error deleting session:', error);
@@ -3144,5 +3140,57 @@
             }
         }
     </script>
+
+    <!-- Replace the script import section with this updated version -->
+    <script type="module">
+        // Import Firebase modules correctly
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDb7Rw9gf3k3OqUjpImv03oBJbDdAzsGpM",
+            authDomain: "gandi-hub-474d2.firebaseapp.com",
+            projectId: "gandi-hub-474d2",
+            storageBucket: "gandi-hub-474d2.appspot.com",
+            messagingSenderId: "877278458127",
+            appId: "1:877278458127:web:22728337144c770a4b8e7a"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Auth state observer
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                document.getElementById('loginSection')?.classList.add('hidden');
+                document.querySelector('.container')?.classList.remove('hidden');
+                loadUserData(user.uid);
+            } else {
+                // User is signed out
+                document.getElementById('loginSection')?.classList.remove('hidden');
+                document.querySelector('.container')?.classList.add('hidden');
+            }
+        });
+
+        // Load user data
+        async function loadUserData(userId) {
+            try {
+                // Add your data loading logic here
+                showSection('dashboard'); // Show dashboard by default
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                showNotification('Failed to load user data', 'error');
+            }
+        }
+    </script>
+
+    <!-- Add these script imports before the closing body tag -->
+    <script src="scripts/auth.js" type="module"></script>
+    <script src="scripts/achievements.js" type="module"></script>
 </body>
 </html>

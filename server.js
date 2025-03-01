@@ -1,28 +1,28 @@
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
+const compression = require('compression');
 const app = express();
+const port = 3000;
 
-// Serve static files from current directory
-app.use(express.static(__dirname));
+// Enable gzip compression
+app.use(compression());
 
-// Redirect root to Gandi-hub.html
+// Cache static files for 1 day
+const staticOptions = {
+    maxAge: '1d',
+    etag: true,
+    lastModified: true
+};
+
+// Serve static files with caching
+app.use(express.static(__dirname, staticOptions));
+
+// Serve index.html as the default page
 app.get('/', (req, res) => {
-    res.redirect('/Gandi-hub.html');
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Handle all other routes
-app.get('*', (req, res) => {
-    const requestedPath = path.join(__dirname, req.path);
-    if (fs.existsSync(requestedPath)) {
-        res.sendFile(requestedPath);
-    } else {
-        res.sendFile(path.join(__dirname, 'Gandi-hub.html'));
-    }
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
-    console.log(`View site at http://localhost:${PORT}/Gandi-hub.html`);
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+    console.log(`View site at http://localhost:${port}/`);
 });
